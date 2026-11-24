@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股策略体检 · 样板报告（脱敏）</title>
+<style>
+:root{--bg:#fbfbfa;--fg:#1a1a1a;--mut:#666;--line:#e3e3e0;--accent:#0b6b4f;--card:#fff}
+@media (prefers-color-scheme:dark){
+:root{--bg:#16161a;--fg:#e8e8e6;--mut:#a0a0a0;--line:#2c2c31;--accent:#5ad1a4;--card:#1d1d22}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+font:16px/1.7 -apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:22px;line-height:1.35;margin:8px 0 14px}
+h2{font-size:18px;margin:32px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+blockquote{margin:12px 0;padding:10px 12px;border-left:3px solid var(--accent);
+background:var(--card);color:var(--mut);font-size:14px;border-radius:0 6px 6px 0}
+blockquote p{margin:4px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px;table-layout:auto}
+th,td{border:1px solid var(--line);padding:5px 6px;text-align:left;white-space:normal;word-break:break-word}
+th{background:var(--card);font-weight:600;font-size:11.5px}
+td:not(:first-child),th:not(:first-child){text-align:right}
+td:first-child,th:first-child{text-align:left;white-space:normal}
+strong{font-weight:650}
+code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:13px;
+font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+pre{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+pre code{background:none;padding:0;font-size:13px;line-height:1.55}
+ol,ul{padding-left:22px}
+li{margin:6px 0}
+hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+.foot{color:var(--mut);font-size:13px}
+.badge{display:inline-block;font-size:12px;color:var(--accent);border:1px solid var(--accent);
+border-radius:999px;padding:1px 9px;margin-left:6px;vertical-align:middle}
+</style></head>
+<body><div class="wrap">
+<h1>策略体检样板报告（脱敏）<span class="badge">免费样板</span></h1>
+<blockquote>
+<p>生成：2026-11-24 11:07 ｜ 样本：4 个模拟账户真实成交，已了结 37 笔 + 未平仓 1 笔 ｜ 区间 2026-10-20 ~ 2026-11-20
+这不是营销页，它就是 ¥199 的完整交付结构：口径 → 三口径绩效 → 双 PF → 输家归因 → 可执行处方 → 复现命令。</p>
+</blockquote>
+<h2>1. 数据与口径（先锁口径，再谈收益）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>成交来源</td>
+<td>券商模拟盘自动同步，非手填</td>
+</tr>
+<tr>
+<td>已了结</td>
+<td>37 笔（买/卖 FIFO 配对，部分成交按份额拆分）</td>
+</tr>
+<tr>
+<td>未平仓</td>
+<td>1 笔（不计入胜率，避免用浮盈美化）</td>
+</tr>
+<tr>
+<td>手续费</td>
+<td>佣金万 2.5（单笔最低 ¥5）＋ 印花税卖出 0.05% ＋ 过户费双边 0.001%，逐笔重算</td>
+</tr>
+<tr>
+<td>单笔买入额均值</td>
+<td>¥32,202 → 固定成本被 ¥5 下限放大到约 0.03% 往返</td>
+</tr>
+<tr>
+<td>手续费合计</td>
+<td>¥1,235.57</td>
+</tr>
+</tbody>
+</table>
+<p><strong>口径先说清楚的原因</strong>：同一批交易，资金口径 / 逐笔均值 / 逐笔复利可以给出方向相反的结论。只报一个数就是作弊。</p>
+<h2>2. 三口径绩效</h2>
+<table>
+<thead>
+<tr>
+<th>账户</th>
+<th style="text-align: right;">笔数</th>
+<th style="text-align: right;">胜率</th>
+<th style="text-align: right;">资金口径</th>
+<th style="text-align: right;">逐笔均值</th>
+<th style="text-align: right;">逐笔等权复利</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>趋势跟随</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">27.3%</td>
+<td style="text-align: right;">-2.28%</td>
+<td style="text-align: right;">-2.66%</td>
+<td style="text-align: right;">-26.70%</td>
+</tr>
+<tr>
+<td>波段</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">6.2%</td>
+<td style="text-align: right;">-4.73%</td>
+<td style="text-align: right;">-5.56%</td>
+<td style="text-align: right;">-60.58%</td>
+</tr>
+<tr>
+<td>逆势</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.0%</td>
+<td style="text-align: right;">-5.46%</td>
+<td style="text-align: right;">-4.00%</td>
+<td style="text-align: right;">-21.95%</td>
+</tr>
+<tr>
+<td>日内网格做T</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">50.0%</td>
+<td style="text-align: right;">+0.07%</td>
+<td style="text-align: right;">+1.99%</td>
+<td style="text-align: right;">+7.90%</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">16.2%</td>
+<td style="text-align: right;">-3.35%</td>
+<td style="text-align: right;">-3.63%</td>
+<td style="text-align: right;">-75.66%</td>
+</tr>
+</tbody>
+</table>
+<p>读法：资金口径=账户真实曲线；逐笔均值=抹平仓位差；逐笔等权复利=每笔都满仓的极端假设。三者差距越大，说明结果越依赖<strong>仓位分配</strong>，而不是策略本身。</p>
+<h2>3. 双盈亏比（可以一个 &gt;1、一个 &lt;1）</h2>
+<table>
+<thead>
+<tr>
+<th>口径</th>
+<th style="text-align: right;">总盈利</th>
+<th style="text-align: right;">总亏损</th>
+<th style="text-align: right;">PF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>金额（元）</td>
+<td style="text-align: right;">¥11,093.43</td>
+<td style="text-align: right;">¥50,997.00</td>
+<td style="text-align: right;">0.218</td>
+</tr>
+<tr>
+<td>等权（%）</td>
+<td style="text-align: right;">+5.15%</td>
+<td style="text-align: right;">-5.33%</td>
+<td style="text-align: right;">0.967</td>
+</tr>
+</tbody>
+</table>
+<p>金额口径决定你赚不赚钱（被大仓位单主导）；等权口径决定方法能不能复制（平均每笔赚得比亏得多不多）。两个都报，才看得出「是策略还是运气」。</p>
+<h2>4. 赢家找规律、输家找纪律（分组，不看全体均值）</h2>
+<p><strong>赢家 6 笔</strong>（净收益率降序前 5）：</p>
+<ul>
+<li><strong>S10</strong>（日内网格做T）10-21→10-27，持 6 天，10.92→11.85，<strong>+8.38%</strong></li>
+<li><strong>S14</strong>（趋势跟随）10-21→10-23，持 2 天，39.33→42.62，<strong>+8.26%</strong></li>
+<li><strong>S22</strong>（波段）10-23→10-29，持 6 天，12.59→13.63，<strong>+8.15%</strong></li>
+<li><strong>S18</strong>（趋势跟随）11-09→11-12，持 3 天，12.48→12.90，<strong>+3.26%</strong></li>
+<li><strong>S10</strong>（日内网格做T）10-21→10-23，持 2 天，10.92→11.15，<strong>+2.00%</strong></li>
+</ul>
+<p><strong>输家 31 笔</strong>（净收益率升序前 5）：</p>
+<ul>
+<li><strong>S15</strong>（波段）10-30→11-02，持 3 天，94.94→85.06，<strong>-10.51%</strong></li>
+<li><strong>S17</strong>（波段）10-26→10-28，持 2 天，36.13→32.47，<strong>-10.23%</strong></li>
+<li><strong>S21</strong>（趋势跟随）11-13→11-16，持 3 天，12.13→10.97，<strong>-9.66%</strong></li>
+<li><strong>S24</strong>（波段）10-28→10-30，持 2 天，46.10→41.74，<strong>-9.58%</strong></li>
+<li><strong>S22</strong>（波段）11-04→11-05，持 1 天，13.92→12.62，<strong>-9.44%</strong></li>
+</ul>
+<p><strong>归因三条（报告必须写到这里，不能只报温度）</strong></p>
+<ol>
+<li><strong>亏在入场还是出场</strong>：31 笔亏损中 11 笔持有 ≤1 天就亏损离场（占 35%）—— 也就是说这部分在入场当天就已经反向，属于入场信号问题，不是止损太松。</li>
+<li><strong>该拿多久</strong>：赢家平均持有 3.5 天，输家平均 3.1 天。两者几乎相同（差 0.4 天）—— 出场纪律中性，既没死扛也没抢跑；盈亏差异来自入场质量，不是持有耐心。</li>
+<li><strong>是不是仓位赌出来的</strong>：盈利最高的 3 笔占总盈利 83.0%。超过一半，结果高度依赖仓位集中，换等额下单会大幅缩水。</li>
+</ol>
+<h2>5. 可执行处方（每条都能被下一批成交验证）</h2>
+<p><strong>处方 1</strong>｜病因：亏损单中有 11 笔在入场首日就反向。<br />
+硬规则：买入当日收盘前若为负，次日开盘无条件离场，不等止损。<br />
+验证：回溯这 11 笔，按次日开盘价离场能省多少元。</p>
+<p><strong>处方 2</strong>｜病因：单笔仓位不均，结果被少数大仓位单主导。<br />
+硬规则：单笔金额固定为账户 25%，不加仓、不摊平。<br />
+验证：下一批成交的 PF(等权) 是否高于本期。</p>
+<p><strong>处方 3</strong>｜病因：单笔金额被最低佣金放大成本。<br />
+硬规则：单笔 ≥ ¥2,000（本期均值 ¥32,202）。<br />
+验证：核算平均单笔金额与手续费占成交额比例。</p>
+<h2>6. 复现命令（每个数都能自己核）</h2>
+<pre><code class="language-bash">unzip A股回测工具包_v2.zip &amp;&amp; cd toolkit_v2
+python3 perf_three_views.py fills.json --json   # 三口径 + 双 PF
+./selftest.sh                                   # 9 项自检
+</code></pre>
+<hr />
+<p>数据来源：本机 4 个模拟账户数据库的 37 笔已了结成交；代码脱敏为 S01..S26；报告由 <code>build_case_report.py</code> 生成，可重跑复现。本报告不含任何预测、不含收益承诺，只描述已发生的成交。</p>
+</div></body></html>

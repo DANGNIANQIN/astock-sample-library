@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股策略体检 · 免费样板库</title>
+<style>
+:root{--ink:#1a1a1a;--mut:#6b6b6b;--line:#e5e5e5;--bg:#fafaf8;--hi:#0b6b3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.75 -apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:28px 18px 64px}
+h1{font-size:23px;line-height:1.35;margin:0 0 6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:26px}
+h2{font-size:17px;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:10px 0}
+ul{padding-left:20px;margin:10px 0}
+li{margin:6px 0}
+a{color:var(--hi);text-decoration:none;border-bottom:1px solid rgba(11,107,58,.25)}
+.card{display:block;border:1px solid var(--line);border-radius:10px;background:#fff;
+ padding:14px 16px;margin:12px 0;text-decoration:none;color:inherit}
+.card:hover{border-color:var(--hi)}
+.card .t{font-weight:600;color:var(--ink);border:0}
+.card .d{color:var(--mut);font-size:14px;margin-top:4px}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;
+ background:#eef5f0;color:var(--hi);margin-right:6px;vertical-align:2px}
+.note{border-left:3px solid var(--hi);background:#fff;padding:10px 14px;margin:16px 0;
+ font-size:14px;color:#333}
+.warn{border-left-color:#b0453a;color:#7a2f27;background:#fdf6f5}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0}
+th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);
+ color:var(--mut);font-size:13px}
+code{background:#f1f1ee;padding:1px 5px;border-radius:4px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>A股策略体检 · 免费样板库</h1>
+<div class="sub">
+  <span class="tag">真实成交</span><span class="tag">三口径并列</span><span class="tag">可复算</span><br>
+  这里放两份可以直接看的样板：一份是对真实账户成交的体检报告，一份是涨停样本的统计实证。
+  看上了再谈活，不看也没关系。
+</div>
+
+<h2>先看两份免费样板</h2>
+
+<a class="card" href="./sample-case.html">
+  <div class="t">① 策略体检报告样板（37 笔真实成交）</div>
+  <div class="d">把 4 个模拟账户的真实成交按 FIFO 配成已了结交易，逐笔重算真实费用（佣金保底 5 元、印花税、过户费），
+  再并列三个口径：资金曲线 / 逐笔均值 / 等权复利。含输家归因与处方。</div>
+</a>
+
+<a class="card" href="./paper-sample-2p.pdf">
+  <div class="t">② 涨停样本统计实证（2 页 PDF / 65,951 条）</div>
+  <div class="d">2023-01-03 至 2026-11-23，941 个交易日，65,951 条涨停记录。
+  连板层级递推、一字板可成交性、成交额分层、次日高开分层——含一个反向结论（条件叠加反而变差）。</div>
+</a>
+
+<div class="note">
+两份样板都是<b>真实数据库跑出来的</b>，不是示意图。第二份里每个数字都能用文末的命令复算。
+</div>
+
+<h2>我能做什么</h2>
+
+<table>
+<tr><th>项目</th><th>交付物</th><th>价格</th></tr>
+<tr><td>策略体检</td><td>你的成交记录 → 三口径绩效 + 输家归因 + 可执行处方（PDF/HTML）</td><td>¥199 起</td></tr>
+<tr><td>公式/指标代写</td><td>通达信/同花顺/文华公式，附测试用例</td><td>¥5 起</td></tr>
+<tr><td>数据整理</td><td>行情/持仓/成交清洗成可回测的面板数据</td><td>按量报价</td></tr>
+<tr><td>回测工具包</td><td>本地跑的回测脚本 + 随机基线 + 自检（拒绝过拟合）</td><td>¥29.9</td></tr>
+</table>
+
+<h2>我的做法（也是边界）</h2>
+<ul>
+  <li><b>先给样本，再收钱。</b>下单前你可以先拿到和你数据同格式的样板。</li>
+  <li><b>三口径并列。</b>同一批交易我会同时报资金曲线、逐笔均值、等权复利。
+      只用其中一个口径讲故事的报告，是我最不想写的那种。</li>
+  <li><b>双实现交叉校验。</b>关键统计用两套独立写法算，不一致就拒绝出报告。</li>
+  <li><b>如实报反例。</b>上面的 PDF 里就有一组「条件叠加反而更差」的结果，照写不误。</li>
+</ul>
+
+<div class="note warn">
+<b>不做的事：</b>不荐股、不代下单、不承诺收益、不碰带未来函数的指标。
+策略能不能赚钱是市场决定的；我能保证的是<b>数字没算错、口径没混用、结论能被复算</b>。
+</div>
+
+<h2>怎么找我</h2>
+<ul>
+  <li>闲鱼：搜索商品标题「A股 策略体检 / 公式代写」（会话恢复后 24h 内回）</li>
+  <li>面包多：店铺建设中</li>
+  <li>本页与样板会一直挂在这里，链接不会过期</li>
+</ul>
+
+<footer>
+  数据源：本地通达信官方日线包（1990 起）+ 涨停明细库，样本区间与口径见各样板文末。<br>
+  本页所有数字均可复现：<code>python3 paper_sample.py</code> → <code>python3 build_paper_pdf.py</code>。
+</footer>
+
+</div>
+</body>
+</html>
