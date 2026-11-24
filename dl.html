@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下载页 · A股回测工具包</title>
+<style>body{font:16px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:640px;margin:14vh auto;padding:0 20px;color:#222}
+.card{border:1px solid #e3e3e3;border-radius:12px;padding:22px}
+a{color:#0b6bcb}</style></head>
+<body><div class="card">
+<p id="s">正在跳转到下载页…</p>
+<p class="tip" style="color:#666;font-size:14px">这个链接永久有效。跳不过去说明下载服务器正在重启，等 10 分钟重试；急的话直接联系卖家。</p>
+</div>
+<script>
+(function(){
+  var s=document.getElementById('s');
+  var q=new URLSearchParams(location.search);
+  var p=q.get('p')||'/';
+  if(p.charAt(0)!=='/')p='/'+p;
+  fetch('tunnel-host.txt?t='+Date.now()).then(function(r){return r.text()}).then(function(h){
+    h=(h||'').trim();
+    if(!h) throw new Error('empty');
+    location.replace('https://'+h+p);
+  }).catch(function(){
+    s.textContent='下载服务器暂时不可达。请 10 分钟后再打开本页；仍未恢复请联系卖家补发。';
+  });
+})();
+</script>
+</body></html>
