@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股数据管道代搭 · 案例与报价 | 九重数据</title>
+<meta name="description" content="A股行情/涨停/板块数据管道代搭：采集、清洗、口径闸门、每日自动更新。案例是一条每天在跑的线上管道，可自查今日输出。报价 ¥800/1600/3000。">
+<style>
+:root{--ink:#1a1a1a;--mut:#6b6b6b;--line:#e5e5e5;--bg:#fafaf8;--hi:#0b6b3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 64px}
+h1{font-size:23px;line-height:1.35;margin:0 0 6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:22px}
+h2{font-size:17px;margin:32px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:10px 0} li{margin:6px 0}
+code{background:#f1f1ee;padding:1px 5px;border-radius:4px;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;background:#fff}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600;background:#fcfcfa}
+.note{border-left:3px solid var(--hi);background:#fff;padding:10px 14px;margin:16px 0;font-size:14px}
+.warn{border-left:3px solid #b0453a;color:#7a2f27;background:#fdf6f5;padding:10px 14px;margin:16px 0;font-size:14px}
+.kpi{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.kpi div{flex:1 1 150px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi b{display:block;font-size:19px} .kpi span{color:var(--mut);font-size:12px}
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}
+a{color:#0b5cad}
+</style></head><body><div class="wrap">
+
+<h1>A股数据管道代搭（采集 / 清洗 / 口径 / 每日更新）</h1>
+<div class="sub">给量化研究、投研小团队、需要自己一套行情数据的人。交付「能用、能复算、能一直跑」的数据，不交付 PPT 和收益承诺。</div>
+
+<div class="note"><b>案例不是截图</b>：下面这三条链接就是一条还在跑的线上管道，你现在打开就能看到它今天刚跑出来的数字。
+A 股数据的坑几乎全在口径（复权、涨停价、ST 分段、连板分段）——口径错一天，整段回测结论就反过来。</div>
+
+<h2>案例（公开可核）</h2>
+<table>
+<tr><th style="width:28%">入口</th><th style="width:36%">链接</th><th>能核到什么</th></tr>
+<tr><td><b>公网每日更新的成品页</b></td><td><a href='https://dangnianqin.github.io/astock-sample-library/live/'>https://dangnianqin.github.io/astock-sample-library/live/</a></td><td>每交易日收盘后自动重建，顶部徽章写的就是该文件自己的最后交易日</td></tr><tr><td><b>免费 30 日全量样本</b></td><td><a href='https://dangnianqin.github.io/astock-sample-library/sample/'>https://dangnianqin.github.io/astock-sample-library/sample/</a></td><td>14 个字段、逐列说明，可直接 pandas 读，不用注册</td></tr><tr><td><b>口径踩坑清单</b></td><td><a href='https://dangnianqin.github.io/astock-sample-library/guide-limitup-caliber.html'>https://dangnianqin.github.io/astock-sample-library/guide-limitup-caliber.html</a></td><td>四条最常算错的红线，每条都写了错误写法与自查办法</td></tr>
+</table>
+
+<div class="kpi">
+  <div><b>100,820</b><span>行涨停记录</span></div>
+  <div><b>1,423</b><span>个交易日</span></div>
+  <div><b>5,370</b><span>只股票</span></div>
+  <div><b>58</b><span>最近一日涨停</span></div>
+  <div><b>15</b><span>最近一日连板</span></div>
+</div>
+<div class="sub">区间 2021-01-11 → 2026-11-25，14 个字段：<code>code</code> / <code>date</code> / <code>board</code> / <code>is_st</code> / <code>close_raw</code> / <code>limit_price</code> / <code>amount</code> / <code>turnover</code> / <code>is_one_word</code> / <code>streak</code> / <code>next_open_gap</code> / <code>next_high_pct</code> / <code>next_close_pct</code> / <code>next_is_limit</code></div>
+
+<h2>交付什么</h2>
+<table><tr><th style="width:18%">层</th><th>内容</th></tr><tr><td><b>数据字典</b></td><td>字段名 / 单位 / 取值范围 / 空值含义 / 可复算示例，逐列对齐真实文件（不做「看着像」的字段表）</td></tr><tr><td><b>采集层</b></td><td>日线 + 复权因子 + 行业/板块 + 事件表，断点续采、重试、异常日跳过并记台账</td></tr><tr><td><b>清洗与口径</b></td><td>复权链、涨停价用 Decimal 定价、ST 分段涨跌幅、连板分段（gaps-islands）、次日字段以当日收盘为基准</td></tr><tr><td><b>质量闸门</b></td><td>进库前断言：完整率、涨跌家数平衡、连板层级自洽；不过闸门不出文件（宁缺不脏）</td></tr><tr><td><b>交付形态</b></td><td>CSV / Parquet / DuckDB 任选 + 每日自动覆盖 + 机读 meta.json（含最后交易日与行数，供你的下游做新鲜度判断）</td></tr></table>
+
+<h2>口径红线（差异点，也是你的验收清单）</h2>
+<table><tr><th style="width:24%">红线</th><th>正确做法</th></tr><tr><td><b>涨停按未复权价判</b></td><td>close_raw ≥ round(preclose_raw×(1+limit_pct),2)−0.001；用复权价判会漏判/误判</td></tr><tr><td><b>ST 涨跌幅分段</b></td><td>主板 ST 2026-08 起 10%，此前 5%；跨该日回测必须按日期分段，否则整段结论作废</td></tr><tr><td><b>连板用分段算法</b></td><td>板数 = 涨停日序号 − 当日连续天数（gaps-islands）；写成 count(*) 会把上一段长度算进来</td></tr><tr><td><b>次日字段的基准</b></td><td>next_* 全部以当日收盘为基准；最后一天必然是空/0，不是数据缺失</td></tr><tr><td><b>价格必须 Decimal</b></td><td>8.15×0.9 浮点得 7.33、交易所是 7.34，一分钱决定封板与否</td></tr></table>
+
+<h2>价格与工期</h2>
+<table>
+<tr><th style="width:22%">档位</th><th style="width:12%">报价</th><th style="width:14%">工期</th><th>范围</th></tr>
+<tr><td><b>A · 单数据集</b></td><td><b>¥800</b></td><td>3–5 工作日</td><td>一次导出 + 数据字典 + 可复算脚本；不管更新</td></tr><tr><td><b>B · 每日自动更新</b></td><td><b>¥1,600</b></td><td>5–8 工作日</td><td>A 的全部 + 采集/清洗/闸门/发布全链 + 30 天 bug 修复；无人值守跑起来</td></tr><tr><td><b>C · 全链路代搭</b></td><td><b>¥3,000</b></td><td>10–15 工作日</td><td>多源合并（行情/板块/事件）+ 交付给你自己的服务器 + 交接文档 + 60 天运维</td></tr>
+</table>
+<div class="sub">先做 A 档验证口径，满意再升档，已付金额可抵扣。</div>
+
+<h2>怎么算「做完了」</h2>
+<ol><li>口径自检：n 板次日涨停数 ≈ n+1 板总数，误差 <1%（我们自己每轮都跑这条）</li><li>抽 200 笔用独立第二实现复算，逐笔一致；不一致的每一笔必须解释</li><li>连续 3 个交易日无人值守自动更新成功（B/C 档）</li><li>数据字典与实际文件列 100% 对齐、示例代码可直接跑通</li><li>第 1、2 项不过：全额退款，不留半成品</li></ol>
+
+<h2>不做什么</h2>
+<ul><li>不代写论文、不做期刊代投（平台明令禁止，也是法律风险）</li><li>不荐股、不预测行情、不承诺收益 —— 只交付数据与工程</li><li>不接触你的账户、不下单、不接资金相关委托</li><li>不做需要绕过平台风控/未授权的数据采集</li></ul>
+
+<div class="warn">如实说明边界：① ST 名单取自公开简称表，新戴帽/摘帽有 1–2 日滞后；2026-08 前 ST 5% 的历史段需按日复核；
+② 2019 年前数据不补（留空是正确状态，硬补等于造假）；③ 盘中实时 tick 不在本次范围，需要另立方案。</div>
+
+<h2>怎么联系</h2>
+<p>① 在 <a href="https://github.com/DANGNIANQIN/astock-sample-library/issues">仓库 issue</a> 直接写需求与预算区间；<br>
+② 或先花十块钱在闲鱼买同一条管道的成品（搜「A股涨停连板数据库」），看数据长什么样再谈代搭。<br>
+首次沟通只要三件事：你要哪几列、更新频率、下游是哪段代码在用。</p>
+
+<section id="buy-cta" style="max-width:860px;margin:32px auto;padding:18px 20px;border:2px solid #1f6feb;border-radius:10px;background:#f6f9ff;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;">
+  <h2 style="margin:0 0 10px;font-size:20px;color:#0b3d91;">先看数据再谈代搭（不用注册）</h2>
+  <ul style="margin:0;padding-left:20px;line-height:1.9;font-size:15px;">
+    <li><b>免费核对</b>：<a href="./sample/">30 日全量样本 + 字段说明</a>，可直接 pandas 读</li>
+    <li><b>¥9.90 买断</b>：6 年 CSV 十万行快照 —— <a href="https://www.goofish.com/item?id=1101776774916" rel="nofollow">闲鱼商品页</a></li>
+    <li><b>¥15.90 每日自动更新</b>：每交易日收盘后同名覆盖 —— <a href="https://www.goofish.com/item?id=1100855871116" rel="nofollow">闲鱼商品页</a></li>
+  </ul>
+  <p style="margin:10px 0 0;font-size:13px;color:#555;">只交付数据与工程；不荐股、不预测、不承诺收益。</p>
+</section>
+
+<footer>本页数字由 <code>assets/build_pipeline_proposal.py</code> 读真实导出文件与 meta.json 现场生成，复算命令：<code>python3 assets/build_pipeline_proposal.py</code>。<br>
+<a href="./">← 返回数据站首页</a> · <a href="./live/">每日更新页</a> · <a href="./guide-limitup-caliber.html">口径踩坑清单</a></footer>
+</div></body></html>
