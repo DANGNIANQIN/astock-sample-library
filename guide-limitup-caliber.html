@@ -29,7 +29,7 @@ pre{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;
 <body>
 <div class="wrap">
 <h1>A股涨停/连板数据，自己算为什么老是算错</h1>
-<div class="sub">四条口径红线 · 附可直接下载自查的免费样本 · 更新到 2026-11-24</div>
+<div class="sub">四条口径红线 · 附可直接下载自查的免费样本 · 更新到 <span data-m="mDate">2026-11-25</span></div>
 
 <p>涨停连板这类数据看着简单：涨幅到 10% 就是涨停，连续几天就是连板。真做起来，同一份行情用不同写法能算出差一倍的连板数。下面四条是我们踩过、并且能复现的坑，每条给出可自查的办法。</p>
 
@@ -69,14 +69,14 @@ pre{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;
 </div>
 <div class="card">
 <b><a href="/limitup-db.html">全量版说明（2021 起 10 万+ 行，付费）</a></b>
-2021-01 至最新交易日、约 1,420 个交易日、10 万+ 条明细，每交易日收盘后重建。含连板数、是否一字、首封时间、次日表现等字段。
+2021-01 至最新交易日、<span data-m="mDays">1424</span> 个交易日、<span data-m="mRows">100,821</span> 条明细，每交易日收盘后重建。含连板数、是否一字、首封时间、次日表现等字段。
 </div>
 
-<h2>最新一天的数据长什么样（2026-11-24）</h2>
+<h2>最新一天的数据长什么样（<span data-m="mDate">2026-11-25</span>）</h2>
 <ul>
-<li>交易日总数：1,423（2021-01-04 起）</li>
-<li>明细行数：100,763</li>
-<li>当日：涨停 64 只、连板 30 只、一字板 10 只、最高 4 板</li>
+<li>交易日总数：<span data-m="mDays">1424</span>（2021-01-04 起）</li>
+<li>明细行数：<span data-m="mRows">100,821</span></li>
+<li>当日：涨停 <span data-m="mZt">58</span> 只、连板 <span data-m="mStreak2">15</span> 只、一字板 <span data-m="mOneWord">3</span> 只、最高 <span data-m="mMaxStreak">5</span> 板</li>
 </ul>
 <p>这几项每天都在变，页面上的 <code>meta.json</code> 是机器可读的同一份数，你可以拿来和 CSV 对。</p>
 
@@ -101,5 +101,6 @@ pre{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;
   </ul>
   <p style="margin:10px 0 0;font-size:13px;color:#555;">口径与数据源全部写在各商品描述里；不承诺收益，只交付数据。已购用户遇到口径疑问可直接在闲鱼私信。</p>
 </section>
+<script src="fresh.js" data-meta="live/meta.json"></script>
 </body>
 </html>

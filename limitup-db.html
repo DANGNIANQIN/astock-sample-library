@@ -28,10 +28,10 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
 <div class="sub">每行 = 一只涨停股在一个交易日的完整画像，次日表现已算好。CSV，解压即用，不需要任何账号或接口。</div>
 
 <div class="kpi">
-  <div><b>100,762</b><span>条涨停记录</span></div>
-  <div><b>1422</b><span>个交易日</span></div>
-  <div><b>5,370</b><span>只股票</span></div>
-  <div><b>70.9</b><span>日均涨停家数</span></div>
+  <div><b data-m="mRows">100,821</b><span>条涨停记录</span></div>
+  <div><b data-m="mDays">1424</b><span>个交易日</span></div>
+  <div><b>5,400+</b><span>只股票</span></div>
+  <div><b data-m="mAvg">70.8</b><span>日均涨停家数</span></div>
   <div><b>25</b><span>历史最高连板</span></div>
 </div>
 
@@ -85,14 +85,14 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
 <div class="note warn">不能做：<b>这不是选股建议，也不承诺任何收益</b>。包内只有历史数据，不含「该买什么」的结论。任何策略都要自己扣佣金、印花税、滑点后重算——短线成本率常常比你想的高一个量级。</div>
 
 <h2>怎么拿</h2>
-<p><b>先免费拿：</b>近 30 个交易日全量明细（1,813 行、14 列全字段，直接用 Excel/pandas 打开）——
+<p><b>先免费拿：</b>最近 30 个交易日全量明细（约 1,800 行、14 列全字段，直接用 Excel/pandas 打开，每日刷新到 <span data-m="mSampleDate">2026-11-25</span>）——
 <a href="sample/limitup_sample_30d.csv">limitup_sample_30d.csv</a>；
-每日情绪全量 <a href="sample/sentiment_daily.csv">sentiment_daily.csv</a>（1,423 天）；
+每日情绪全量 <a href="sample/sentiment_daily.csv">sentiment_daily.csv</a>（<span data-m="mDays">1424</span> 天）；
 连板统计 <a href="sample/streak_stats.csv">streak_stats.csv</a>；
 字段口径 <a href="sample/fields.md">fields.md</a>。看完觉得能用再买完整版。</p>
 <p>闲鱼下单后自动发货，消息里给长期下载链接（CSV + 说明 + 示例脚本，压缩包约 2.4 MB）。链接长期有效，可反复下载。数据有问题随时回我，我改。</p>
 
-<footer>九重映画 · 数据包样例页 · 数据截至 2026-11-24，生成于 2026-11-25</footer>
+<footer>九重映画 · 数据包样例页 · 数据截至 <span data-m="mDate">2026-11-25</span></footer>
 </div>
 <section id="buy-cta" style="max-width:860px;margin:32px auto;padding:18px 20px;border:2px solid #1f6feb;border-radius:10px;background:#f6f9ff;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;">
   <h2 style="margin:0 0 10px;font-size:20px;color:#0b3d91;">要全量数据？三条路，按需要挑</h2>
@@ -103,4 +103,5 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
   </ul>
   <p style="margin:10px 0 0;font-size:13px;color:#555;">口径与数据源全部写在各商品描述里；不承诺收益，只交付数据。已购用户遇到口径疑问可直接在闲鱼私信。</p>
 </section>
+<script src="fresh.js" data-meta="live/meta.json"></script>
 </body></html>

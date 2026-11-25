@@ -50,7 +50,7 @@ th{color:var(--muted);font-weight:600}
     <span>全量汇总（不随窗口缩小）：按「第几板」分组——样本数、平均/中位开盘溢价、次日收益、次日涨停率、收盘胜率、一字板占比</span></a>
   <a class="file" href="情绪日度_近120交易日.csv">情绪日度_近120交易日.csv
     <span>最近 120 个交易日：涨停/连板/一字家数、最高连板、涨停股总成交额、平均换手、次日涨停率</span></a>
-  <div class="note" style="margin-top:10px">全量历史（2021 起 · 100,763 行 · 1,423 个交易日）不公开在这里，在付费包里给：同一份数据的完整 CSV + 每日增量。上面的预览就够你先验证口径对不对。</div>
+  <div class="note" style="margin-top:10px">全量历史（2021 起 · <span data-m="mRows">100,821</span> 行 · <span data-m="mDays">1424</span> 个交易日）不公开在这里，在付费包里给：同一份数据的完整 CSV + 每日增量。上面的预览就够你先验证口径对不对。</div>
 </div>
 
 <div class="card">
@@ -99,5 +99,6 @@ fetch("meta.json", {cache: "no-store"}).then(r => r.json()).then(m => {
   </ul>
   <p style="margin:10px 0 0;font-size:13px;color:#555;">口径与数据源全部写在各商品描述里；不承诺收益，只交付数据。已购用户遇到口径疑问可直接在闲鱼私信。</p>
 </section>
+<script src="../fresh.js" data-meta="meta.json"></script>
 </body>
 </html>
