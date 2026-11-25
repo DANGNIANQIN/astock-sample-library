@@ -28,8 +28,9 @@ th{color:var(--muted);font-weight:600}
 
 <div class="card">
   <div style="font-weight:600;margin-bottom:6px">下载（最新 30 个交易日全量，不是节选）</div>
+  <div class="note" id="fresh" style="margin:-2px 0 8px">正在读取最新数据日期…</div>
   <a class="file" href="limitup_sample_30d.csv">limitup_sample_30d.csv
-    <span>2026-10-14 → 2026-11-24 全部涨停明细，1,813 行 × 14 列</span></a>
+    <span>最近 30 个交易日的全部涨停明细（不是节选）× 14 列，与付费版同一份口径</span></a>
   <a class="file" href="sentiment_daily.csv">sentiment_daily.csv
     <span>每个交易日的涨停/跌停/连板家数、成交额、上涨家数（情绪面日频）</span></a>
   <a class="file" href="streak_stats.csv">streak_stats.csv
@@ -43,27 +44,29 @@ th{color:var(--muted);font-weight:600}
 <pre><code>import pandas as pd
 df = pd.read_csv("limitup_sample_30d.csv", parse_dates=["date"])
 df.groupby("date")["code"].count().tail()        # 每日涨停家数
-df.groupby("boards")["code"].count()             # 连板梯队分布</code></pre>
+df.groupby("streak")["code"].count()             # 连板梯队分布（1=首板）
+df[["next_open_gap","next_close_pct"]].describe()  # 次日开盘跳空 / 次日收盘收益分布</code></pre>
 </div>
 
 <div class="card">
-  <div style="font-weight:600;margin-bottom:8px">字段（14 列）</div>
+  <div style="font-weight:600;margin-bottom:8px">字段（14 列，逐列对上文件头）</div>
   <table>
     <tr><th>列</th><th>含义</th></tr>
-    <tr><td>date / code / name</td><td>交易日、6 位代码、简称</td></tr>
-    <tr><td>close / pct_chg / limit_pct</td><td>收盘价、当日涨跌幅(%)、该板涨跌幅上限(小数)</td></tr>
-    <tr><td>amount / turnover / amplitude</td><td>成交额(元)、换手率(%)、振幅(%)</td></tr>
-    <tr><td>boards</td><td>截至当日的连板高度（1=首板）</td></tr>
-    <tr><td>is_one_word / is_st</td><td>是否一字板、是否 ST</td></tr>
-    <tr><td>first_seal_time / seal_fund</td><td>首次封板时间(HHMMSS)、封单额(元)</td></tr>
-    <tr><td>board</td><td>主板 / 创业板 / 科创板 / 北交所</td></tr>
+    <tr><td>code / date / board</td><td>6 位代码、交易日、板块（MAIN 主板 / GEM 创业板 / STAR 科创板 / BSE 北交所）</td></tr>
+    <tr><td>is_st</td><td>是否 ST（涨跌幅 2026-08 起 10%、此前 5%）</td></tr>
+    <tr><td>close_raw / limit_price</td><td>未复权收盘价、当日涨停价（四舍五入到分，判断封板用这一对）</td></tr>
+    <tr><td>amount / turnover</td><td>成交额(元)、换手率(%)</td></tr>
+    <tr><td>is_one_word / streak</td><td>是否一字板、截至当日的连板高度（1=首板）</td></tr>
+    <tr><td>next_open_gap</td><td>次日开盘相对当日收盘的跳空（小数，0.03=高开 3%）</td></tr>
+    <tr><td>next_high_pct / next_close_pct</td><td>次日最高价 / 次日收盘 相对当日收盘（小数）</td></tr>
+    <tr><td>next_is_limit</td><td>次日是否再次涨停（1/0；最后一个交易日为 0 是因为次日尚无数据，不要当成「不会涨停」）</td></tr>
   </table>
-  <div class="note" style="margin-top:10px">口径：涨停按未复权价与前收计算（<code>close_raw &gt;= round(preclose*(1+limit_pct),2)-0.001</code>），ST 涨跌幅 2026-08 起为 10%、此前 5%。</div>
+  <div class="note" style="margin-top:10px">口径：涨停按未复权价与前收计算（<code>close_raw &gt;= round(preclose*(1+limit_pct),2)-0.001</code>）；连板用 gaps-islands 法（涨停日序号 − 段内序号），跨周末不会断。</div>
 </div>
 
 <div class="card">
   <div style="font-weight:600;margin-bottom:6px">全量版</div>
-  <div class="note">2021-01 至今：1,422 个交易日 / 100,762 条涨停明细 / 5,370 只个股 / 25 个字段（另含封板快照与次日表现）。<br>
+  <div class="note" id="fullstat">2021-01 至今：全量 6 年涨停明细（行数与最新日期见 <a href="../live/">每日更新页</a>）。<br>
   获取与价格见：<a href="../limitup-db.html">数据包说明页</a>。</div>
 </div>
 
@@ -79,5 +82,21 @@ df.groupby("boards")["code"].count()             # 连板梯队分布</code></pr
   </ul>
   <p style="margin:10px 0 0;font-size:13px;color:#555;">口径与数据源全部写在各商品描述里；不承诺收益，只交付数据。已购用户遇到口径疑问可直接在闲鱼私信。</p>
 </section>
+<script>
+fetch("../live/meta.json", {cache: "no-store"}).then(r => r.json()).then(m => {
+  const s = m.sample || {}, f = m.latest || {};
+  const el = document.getElementById("fresh");
+  if (el) el.textContent = "样本已更新至 " + (s.last_date || m.last_trade_date) +
+    "（最后交易日全市场涨停 " + (f.limit_up ?? "-") + " 家 · 连板 " + (f.streak2plus ?? "-") +
+    " 家 · 一字 " + (f.one_word ?? "-") + " 家 · 最高 " + (f.max_streak ?? "-") + " 板）";
+  const fs = document.getElementById("fullstat");
+  if (fs) fs.insertAdjacentHTML("afterbegin",
+    "全量 <b>" + m.rows.toLocaleString() + "</b> 行 / <b>" + m.trading_days +
+    "</b> 个交易日，最新到 <b>" + m.last_trade_date + "</b>。<br>");
+}).catch(() => {
+  const el = document.getElementById("fresh");
+  if (el) el.textContent = "（最新日期读取失败，下载的文件内 date 列即为最新）";
+});
+</script>
 </body>
 </html>
