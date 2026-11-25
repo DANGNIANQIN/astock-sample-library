@@ -1,0 +1,15 @@
+{
+ "涨停明细_2021-2026.csv": 8655402,
+ "连板统计.csv": 1395,
+ "情绪日度.csv": 100696,
+ "updated_at": "2026-11-25T12:02:09+08:00",
+ "last_trade_date": "2026-11-24",
+ "rows": 100763,
+ "trading_days": 1423,
+ "latest": {
+  "limit_up": 64,
+  "streak2plus": 30,
+  "one_word": 10,
+  "max_streak": 4
+ }
+}
