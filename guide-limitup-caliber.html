@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股涨停/连板数据自己算为什么老是算错：四条口径红线（附免费样本）</title>
+<meta name="description" content="涨停判定的未复权口径、ST 涨跌幅 2026-08 分段、连板跨周末的 gaps-islands 算法、次日字段以当日收盘为基准——四条最容易算错的地方，附可自查的免费样本数据和校验办法。">
+<style>
+:root{--ink:#1a1a1a;--mut:#6b6b6b;--line:#e5e5e5;--bg:#fafaf8;--hi:#0b6b3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.75 -apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:28px 18px 64px}
+h1{font-size:23px;line-height:1.35;margin:0 0 6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:26px}
+h2{font-size:17px;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:10px 0}
+ul,ol{padding-left:20px;margin:10px 0}
+li{margin:6px 0}
+a{color:var(--hi);text-decoration:none;border-bottom:1px solid rgba(11,107,58,.25)}
+code{background:#f0efe9;padding:1px 5px;border-radius:4px;font-size:14px}
+pre{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;font-size:13px}
+.bad{color:#a32b1f}
+.card{display:block;border:1px solid var(--line);border-radius:10px;background:#fff;padding:14px 16px;margin:12px 0}
+.card b{display:block;margin-bottom:4px}
+.foot{color:var(--mut);font-size:13px;margin-top:36px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>A股涨停/连板数据，自己算为什么老是算错</h1>
+<div class="sub">四条口径红线 · 附可直接下载自查的免费样本 · 更新到 2026-11-24</div>
+
+<p>涨停连板这类数据看着简单：涨幅到 10% 就是涨停，连续几天就是连板。真做起来，同一份行情用不同写法能算出差一倍的连板数。下面四条是我们踩过、并且能复现的坑，每条给出可自查的办法。</p>
+
+<h2>一、涨停要用<strong>未复权价</strong>判，不是复权价</h2>
+<p>复权价是把历史价格按分红送转调整过的结果，用来算相对涨跌幅没问题，用来判「今天有没有涨停」会错——除权日前后复权价与前收的比例被人为改平，涨幅永远凑不到整 10%。</p>
+<p>正确判据（价格四舍五入到分，判等要留半个最小价位的容差）：</p>
+<pre>is_limit_up = close_raw &gt;= round(preclose_raw * (1 + limit_pct), 2) - 0.001</pre>
+<p class="bad">常见错法：拿 <code>close / preclose - 1 &gt;= 0.095</code> 判涨停。0.095 这个阈值会把涨 9.6% 的票算成涨停，同时漏掉 <code>limit_pct=5%</code> 的票（老 ST）。</p>
+
+<h2>二、ST 的涨跌幅是<strong>分段</strong>的，不能一个值套到底</h2>
+<p>ST 股 2026-08 起是 10%，之前是 5%。跨这个日期做回测，必须按 <code>asof</code> 分段取 <code>limit_pct</code>，而不是用当前状态一把填满。</p>
+<p>数据自证：把全部 ST 股的 <code>|涨跌幅|</code> 落在 4.8%~9.7% 区间的行捞出来，如果有一万多条，说明 5% 那段确实存在——这是我们当时反查出来的证据，不是文档抄来的。</p>
+
+<h2>三、连板数：<strong>跨周末不算断，但「第几板」不是数天数</strong></h2>
+<p>连板 = 连续若干个交易日涨停。「连续性」要建立在<strong>完整交易日序列</strong>上，不是自然日。</p>
+<p class="bad">三种典型错法（都会算错）：</p>
+<ul>
+<li>用 <code>row_number - sum(is_limit)</code> 分组后取 <code>count(*)</code>：会把段前的非涨停日算进组，1 板数量明显偏少、2 板暴涨。</li>
+<li>改用 <code>sum(is_limit)</code> 当组标识：同一段每行拿到的都是段<strong>总长度</strong>，不是第几板。</li>
+<li>用 <code>date - (streak-1) * 1 天</code> 当组标识：跨周末直接断组，长连板会整段丢失。</li>
+</ul>
+<p>可用的写法是 gaps-and-islands：先在全交易日序列上用 <code>lead()</code> 把次日数据带到当日，再过滤涨停行，段标识取「涨停日序号 − 当前连板长度」，当日板数 = 段内 <code>row_number</code>。</p>
+<p>验收标准（我们实际用的）：<strong>n 板的次日涨停数 ≈ n+1 板总数，误差 &lt; 1%</strong>。对不上就是算错了，不用看别的。</p>
+
+<h2>四、次日字段的基准是<strong>当日收盘</strong>，不是次日开盘</h2>
+<p>明细里给「次日涨幅」时，分母必须是当日收盘价。用次日开盘做基准会让所有隔夜跳空被吃掉，做出来的统计看着「更稳」，实际是错的。</p>
+<p>同理，「次日是否涨停」也要用次日的 <code>preclose</code> 与其 <code>close</code> 比，不能拿两天的收盘价直接比。</p>
+
+<h2>免费样本：可以自己核对上面四条</h2>
+<div class="card">
+<b><a href="/sample/">免费样本库</a></b>
+4 个 CSV + 字段说明 + pandas 直读片段，含 30 天全量明细，够你复现上面的连板计算并验收到 <1% 误差。
+</div>
+<div class="card">
+<b><a href="/live/">每日更新预览（最近窗口，跟着刷新）</a></b>
+最近 40 个交易日的涨停明细、最近 120 个交易日情绪日度、连板统计汇总；页面顶部有数据时间戳和行数，可以自己比对是不是最新的。
+</div>
+<div class="card">
+<b><a href="/limitup-db.html">全量版说明（2021 起 10 万+ 行，付费）</a></b>
+2021-01 至最新交易日、约 1,420 个交易日、10 万+ 条明细，每交易日收盘后重建。含连板数、是否一字、首封时间、次日表现等字段。
+</div>
+
+<h2>最新一天的数据长什么样（2026-11-24）</h2>
+<ul>
+<li>交易日总数：1,423（2021-01-04 起）</li>
+<li>明细行数：100,763</li>
+<li>当日：涨停 64 只、连板 30 只、一字板 10 只、最高 4 板</li>
+</ul>
+<p>这几项每天都在变，页面上的 <code>meta.json</code> 是机器可读的同一份数，你可以拿来和 CSV 对。</p>
+
+<h2>边界，写在前面</h2>
+<ul>
+<li>数据来自公开行情整理，<strong>只做统计口径，不构成任何投资建议</strong>，也不承诺任何收益。</li>
+<li>涨停判定依赖交易所收盘价与昨收，遇到停牌复牌、除权除息日会有个别行需要人工复核，样本里已标注口径。</li>
+<li>样本与预览都是<strong>免费</strong>的，付费的只有全量历史 + 每日重建。</li>
+</ul>
+
+<div class="foot">
+有问题可以直接在闲鱼找我：搜「A股股票数据」或「涨停连板」；也可以先看 <a href="/index.html">站点首页</a>。
+</div>
+</div>
+</body>
+</html>

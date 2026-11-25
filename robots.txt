@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dangnianqin.github.io/astock-sample-library/sitemap.xml
