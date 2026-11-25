@@ -14,6 +14,8 @@
       mStreak2: String(f.streak2plus),
       mOneWord: String(f.one_word),
       mMaxStreak: String(f.max_streak),
+      mSt: String(f.st_count),
+      mExclSt: String(f.excl_st),
       mSampleDate: (m.sample && m.sample.last_date) || m.last_trade_date
     };
     document.querySelectorAll("[data-m]").forEach(function (el) {

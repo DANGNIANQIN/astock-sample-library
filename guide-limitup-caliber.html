@@ -79,6 +79,7 @@ pre{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;
 <li>当日：涨停 <span data-m="mZt">58</span> 只、连板 <span data-m="mStreak2">15</span> 只、一字板 <span data-m="mOneWord">3</span> 只、最高 <span data-m="mMaxStreak">5</span> 板</li>
 </ul>
 <p>这几项每天都在变，页面上的 <code>meta.json</code> 是机器可读的同一份数，你可以拿来和 CSV 对。</p>
+<p><b>顺手对个账（今天实测）：</b>同一天我们算 <span data-m="mZt">58</span> 家涨停，东财「涨停池」接口只给 <span data-m="mExclSt">51</span> 家。差的 <span data-m="mSt">7</span> 家全是 <b>ST</b>——东财涨停池默认剔除 ST，我们这张表保留。两边都没错，但你必须知道自己拿的是哪一种；用错口径做回测，ST 的 5%→10% 分段涨跌幅会把连板和次日续板率一起算歪。</p>
 
 <h2>边界，写在前面</h2>
 <ul>

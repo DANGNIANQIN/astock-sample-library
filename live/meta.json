@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-25T15:38:08+08:00",
+ "updated_at": "2026-11-25T15:44:04+08:00",
  "last_trade_date": "2026-11-25",
  "rows": 100821,
  "trading_days": 1424,
@@ -7,7 +7,10 @@
   "limit_up": 58,
   "streak2plus": 15,
   "one_word": 3,
-  "max_streak": 5
+  "max_streak": 5,
+  "st_count": 8,
+  "excl_st": 50,
+  "caliber_note": "本表包含 ST（东财涨停池默认剔除 ST，同一天我们的家数会比它多出 ST 那一部分）"
  },
  "preview": {
   "note": "公开页只放窗口预览；全量 2021 起（约 100821 行）在付费包里",
