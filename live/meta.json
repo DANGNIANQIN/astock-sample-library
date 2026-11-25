@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-25T15:32:07+08:00",
+ "updated_at": "2026-11-25T15:38:08+08:00",
  "last_trade_date": "2026-11-25",
  "rows": 100821,
  "trading_days": 1424,
@@ -27,6 +27,15 @@
    "涨停明细_2021-2026.csv": 8660502,
    "情绪日度.csv": 100829,
    "连板统计.csv": 1396
+  }
+ },
+ "sample": {
+  "note": "免费样本，与 /live/ 同日刷新",
+  "last_date": "2026-11-25",
+  "files": {
+   "limitup_sample_30d.csv": 157735,
+   "sentiment_daily.csv": 30167,
+   "streak_stats.csv": 1396
   }
  }
 }
