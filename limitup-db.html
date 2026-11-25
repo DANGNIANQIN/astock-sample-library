@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股涨停 / 连板数据库 2021-2026 · 样例预览</title>
+<style>
+:root{--ink:#1a1a1a;--mut:#6b6b6b;--line:#e5e5e5;--bg:#fafaf8;--hi:#0b6b3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 64px}
+h1{font-size:23px;line-height:1.35;margin:0 0 6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:22px}
+h2{font-size:17px;margin:32px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:10px 0} li{margin:6px 0}
+code{background:#f1f1ee;padding:1px 5px;border-radius:4px;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;background:#fff}
+th,td{border-bottom:1px solid var(--line);padding:6px 6px;text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600;background:#fcfcfa}
+.note{border-left:3px solid var(--hi);background:#fff;padding:10px 14px;margin:16px 0;font-size:14px}
+.warn{border-left-color:#b0453a;color:#7a2f27;background:#fdf6f5}
+.kpi{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.kpi div{flex:1 1 150px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi b{display:block;font-size:19px}
+.kpi span{color:var(--mut);font-size:12px}
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}
+</style></head><body><div class="wrap">
+
+<h1>A股涨停 / 连板数据库（2021-2026）</h1>
+<div class="sub">每行 = 一只涨停股在一个交易日的完整画像，次日表现已算好。CSV，解压即用，不需要任何账号或接口。</div>
+
+<div class="kpi">
+  <div><b>100,762</b><span>条涨停记录</span></div>
+  <div><b>1422</b><span>个交易日</span></div>
+  <div><b>5,370</b><span>只股票</span></div>
+  <div><b>70.9</b><span>日均涨停家数</span></div>
+  <div><b>25</b><span>历史最高连板</span></div>
+</div>
+
+<h2>三个文件</h2>
+<table>
+<tr><th>文件</th><th>内容</th></tr>
+<tr><td>涨停明细_2021-2026.csv</td><td>价格、成交额、换手、第几板、是否一字板，以及<b>次日开盘溢价 / 最高 / 收盘 / 是否继续涨停</b>全部算好</td></tr>
+<tr><td>连板统计.csv</td><td>按「第几板」分组的次日期望：样本数、开盘溢价、次日收益、次日涨停率、收盘胜率、一字板占比</td></tr>
+<tr><td>情绪日度.csv</td><td>每个交易日的涨停家数、连板家数、一字家数、最高连板、涨停股总成交额、次日涨停率</td></tr>
+<tr><td>字段说明.md + 示例_读数据.py</td><td>口径写清楚；示例脚本用 pandas 直接跑出下面这些统计</td></tr>
+</table>
+
+<h2>字段</h2>
+<table><tr><th>字段</th><th>含义</th></tr>
+<tr><td><code>code</code></td><td>股票代码</td></tr><tr><td><code>date</code></td><td>交易日</td></tr><tr><td><code>board</code></td><td>板块 MAIN/GEM/STAR/BJ</td></tr><tr><td><code>is_st</code></td><td>是否 ST</td></tr><tr><td><code>close_raw</code></td><td>收盘价（未复权）</td></tr><tr><td><code>limit_price</code></td><td>当日涨停价</td></tr><tr><td><code>amount</code></td><td>成交额（元）</td></tr><tr><td><code>turnover</code></td><td>换手率（%，6.18=6.18%）</td></tr><tr><td><code>is_one_word</code></td><td>1=一字板</td></tr><tr><td><code>streak</code></td><td>第几连板（1=首板）</td></tr><tr><td><code>next_open_gap</code></td><td>次日开盘溢价（0.052=+5.2%）</td></tr><tr><td><code>next_high_pct</code></td><td>次日最高涨幅</td></tr><tr><td><code>next_close_pct</code></td><td>次日收盘涨幅</td></tr><tr><td><code>next_is_limit</code></td><td>1=次日继续涨停</td></tr>
+</table>
+
+<h2>真实样例行（明细表前 8 行，原样输出）</h2>
+<table><tr><th>code</th><th>date</th><th>board</th><th>is_st</th><th>close_raw</th><th>limit_price</th><th>amount</th><th>turnover</th><th>is_one_word</th><th>streak</th><th>next_open_gap</th><th>next_high_pct</th><th>next_close_pct</th><th>next_is_limit</th></tr>
+<tr><td>000301</td><td>2021-01-11</td><td>MAIN</td><td>false</td><td>13.02</td><td>13.02</td><td>857369920.0</td><td>1.0222</td><td>0</td><td>1</td><td>0.0138</td><td>0.0998</td><td>0.0998</td><td>1</td></tr><tr><td>000570</td><td>2021-01-11</td><td>MAIN</td><td>false</td><td>7.13</td><td>7.13</td><td>274398048.0</td><td>6.9718</td><td>0</td><td>1</td><td>0.0379</td><td>0.0996</td><td>0.0098</td><td>0</td></tr><tr><td>000615</td><td>2021-01-11</td><td>MAIN</td><td>true</td><td>8.39</td><td>8.31</td><td>367560256.0</td><td>4.8437</td><td>0</td><td>1</td><td>-0.0203</td><td>0.0906</td><td>0.0715</td><td>1</td></tr><tr><td>000668</td><td>2021-01-11</td><td>MAIN</td><td>false</td><td>16.38</td><td>16.38</td><td>14538888.0</td><td>0.6045</td><td>1</td><td>1</td><td>-0.0055</td><td>0.1001</td><td>-0.0018</td><td>0</td></tr><tr><td>000718</td><td>2021-01-11</td><td>MAIN</td><td>false</td><td>4.82</td><td>4.82</td><td>773976896.0</td><td>7.2277</td><td>0</td><td>1</td><td>-0.0581</td><td>-0.0145</td><td>-0.0685</td><td>0</td></tr><tr><td>000918</td><td>2021-01-11</td><td>MAIN</td><td>false</td><td>3.62</td><td>3.62</td><td>42583864.0</td><td>0.0</td><td>0</td><td>1</td><td>0.0994</td><td>0.0994</td><td>0.0994</td><td>1</td></tr><tr><td>001896</td><td>2021-01-11</td><td>MAIN</td><td>false</td><td>9.31</td><td>9.31</td><td>1735539968.0</td><td>12.7283</td><td>0</td><td>1</td><td>-0.0344</td><td>-0.0344</td><td>-0.0999</td><td>0</td></tr><tr><td>002017</td><td>2021-01-11</td><td>MAIN</td><td>false</td><td>10.47</td><td>10.47</td><td>270308704.0</td><td>4.5741</td><td>0</td><td>1</td><td>0.0</td><td>0.1003</td><td>0.0411</td><td>0</td></tr>
+</table>
+
+<h2>连板统计（真实输出）</h2>
+<table><tr><th>streak</th><th>n</th><th>avg_open_gap</th><th>med_open_gap</th><th>avg_close_ret</th><th>med_close_ret</th><th>p_next_limit</th><th>winrate_close</th><th>pct_one_word</th></tr>
+<tr><td>1</td><td>77562</td><td>0.0181</td><td>0.0106</td><td>0.0162</td><td>0.0094</td><td>0.1776</td><td>0.5647</td><td>0.0298</td></tr><tr><td>2</td><td>13747</td><td>0.0289</td><td>0.0224</td><td>0.0221</td><td>0.0213</td><td>0.3406</td><td>0.5909</td><td>0.17</td></tr><tr><td>3</td><td>4677</td><td>0.0358</td><td>0.0401</td><td>0.0281</td><td>0.0496</td><td>0.4691</td><td>0.6355</td><td>0.2908</td></tr><tr><td>4</td><td>2193</td><td>0.038</td><td>0.0484</td><td>0.0294</td><td>0.0502</td><td>0.5021</td><td>0.6553</td><td>0.3228</td></tr><tr><td>5</td><td>1101</td><td>0.0372</td><td>0.0488</td><td>0.0293</td><td>0.0509</td><td>0.5295</td><td>0.6576</td><td>0.347</td></tr><tr><td>6</td><td>583</td><td>0.0432</td><td>0.0502</td><td>0.0374</td><td>0.0586</td><td>0.5678</td><td>0.7084</td><td>0.3688</td></tr>
+</table>
+<p style="color:#6b6b6b;font-size:13px">读法：<code>avg_close_ret</code> 是「当日收盘买入、次日收盘卖出」的平均收益（未扣成本）；<code>p_next_limit</code> 是次日继续涨停的比例。<b>这是历史统计，不是预测。</b></p>
+
+<h2>最近 8 个交易日的情绪（真实输出）</h2>
+<table><tr><th>date</th><th>涨停家数</th><th>连板家数</th><th>一字家数</th><th>最高连板</th><th>次日涨停率</th></tr>
+<tr><td>2026-11-13</td><td>38</td><td>7</td><td>1</td><td>4</td><td>0.2894736842105263</td></tr><tr><td>2026-11-16</td><td>33</td><td>11</td><td>1</td><td>4</td><td>0.18181818181818182</td></tr><tr><td>2026-11-17</td><td>37</td><td>6</td><td>3</td><td>3</td><td>0.21621621621621623</td></tr><tr><td>2026-11-18</td><td>43</td><td>8</td><td>3</td><td>4</td><td>0.11627906976744186</td></tr><tr><td>2026-11-19</td><td>28</td><td>5</td><td>4</td><td>3</td><td>0.14285714285714285</td></tr><tr><td>2026-11-20</td><td>30</td><td>4</td><td>1</td><td>4</td><td>0.5666666666666667</td></tr><tr><td>2026-11-23</td><td>152</td><td>17</td><td>4</td><td>5</td><td>0.19736842105263158</td></tr><tr><td>2026-11-24</td><td>64</td><td>30</td><td>10</td><td>4</td><td>0.0</td></tr>
+</table>
+
+<h2>口径（重要）</h2>
+<ul>
+<li>涨停判定用<b>未复权价</b>：<code>close_raw &gt;= round(preclose*(1+limit_pct),2) - 0.001</code>。用复权价判会在除权日漏判。</li>
+<li>涨跌幅已按规则分段：主板 10%、创业板/科创板 20%、北交所 30%；<b>ST 在 2026-08-01 前 5%、之后 10%</b>；新股前 5 日不限涨跌幅（不在本表）。</li>
+<li>次日字段是<b>相对当日收盘价</b>。A 股 T+1，所以「当日收盘买、次日开盘卖」才是合法口径，<code>next_open_gap</code> 就是这笔的毛利（未扣手续费）。</li>
+<li>最后一个交易日的次日字段为空（还没发生），别当 0。</li>
+</ul>
+
+<h2>已知边界（不藏）</h2>
+<ul>
+<li>没有盘中<b>涨停时间</b>和<b>封单额</b>：日线数据先天没有封板时间，封单额只有 2026-11 起才有，样本太短不单独提供。</li>
+<li>没有分钟级<b>炸板率</b>：可以用 <code>high_raw</code> 是否触及涨停价自行近似。</li>
+<li>2021 年前的涨停不在包内；2021-01-04 因数据源覆盖不全（仅 1 条）已剔除。</li>
+</ul>
+
+<h2>能做什么 / 不能做什么</h2>
+<p>能做：复算「几板之后次日胜率多高」「一字板和换手板差多少」「小成交额是不是更容易连板」「每天涨停家数和次日涨停率的关系」，给自己的策略做基准线。</p>
+<div class="note warn">不能做：<b>这不是选股建议，也不承诺任何收益</b>。包内只有历史数据，不含「该买什么」的结论。任何策略都要自己扣佣金、印花税、滑点后重算——短线成本率常常比你想的高一个量级。</div>
+
+<h2>怎么拿</h2>
+<p>闲鱼下单后自动发货，消息里给长期下载链接（CSV + 说明 + 示例脚本，压缩包约 2.4 MB）。链接长期有效，可反复下载。数据有问题随时回我，我改。</p>
+
+<footer>九重映画 · 数据包样例页 · 数据截至 2026-11-24，生成于 2026-11-25</footer>
+</div></body></html>
