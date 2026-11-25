@@ -1,27 +1,41 @@
-# A股涨停/连板数据集（2021–2026，10 万条）+ 策略体检样板
+# A股涨停/连板数据集（2021–2026，10 万+ 条）+ 策略体检样板
 
 这个仓库放两样**真数据跑出来的**东西：一是可以直接下载的 A 股涨停数据集（含免费样例），
 二是几个不好看但真实的复盘/体检样板。先看东西，再决定要不要聊。
 
 ## 一、涨停数据集（免费样例就在本仓库）
 
-6 年 / 1,423 个交易日 / 5,370 只股票 / **10 万条涨停记录**（行数每天增加，准确数以 [`live/meta.json`](live/meta.json) 为准），每条带连板高度、一字板标记、
+6 年 / 5,370 只股票（含退市股），每条带连板高度、一字板标记、
 次日开盘溢价、次日收盘、次日是否续板。数据源是本机通达信官方日线包（1990 年起，5,900+ 只，含退市股）。
+行数、最新交易日这些每天会变的数字一律看下面这块自动生成的表，不要手写。
+
+<!-- LIVE-BEGIN 自动生成：build_pack/update_daily.py 每次运行重写，勿手改 -->
+
+| 指标 | 数值 |
+|---|---|
+| 最新交易日 | **2026-11-25** |
+| 全量涨停记录 | **100,820** 条 |
+| 覆盖交易日 | **1,423** 个（2021-01-11 起） |
+| 当日涨停 | **58** 家（连板 15 / 一字 3 / 最高 5 板 / ST 8） |
+| 免费样本 | `limitup_sample_30d.csv` **1,834** 行 · 2026-10-15 → 2026-11-25（30 个交易日） |
+
+以上由构建脚本按 `live/meta.json` 写出，与付费包逐行一致；数字每天变，不要手改这一块。
+<!-- LIVE-END -->
 
 口径红线：**只用未复权价判涨停**（`close_raw >= round(前收×(1+涨跌幅限制),2)`，Decimal 四舍五入到分）；
 ST 2026-08 前 5%、之后 10%；创业板/科创板 20%、北交所 30%、新股前 5 日不限。
 
 | 免费文件 | 内容 | 行数 |
 |---|---|---|
-| [`sample/limitup_sample_30d.csv`](sample/limitup_sample_30d.csv) | 2026-10-14 → 11-24 全部涨停记录，14 列全字段 | 1,813 |
-| [`sample/sentiment_daily.csv`](sample/sentiment_daily.csv) | 每日涨停家数 / 一字板数 / 最高板 / 次日续板数 | 1,423 |
+| [`sample/limitup_sample_30d.csv`](sample/limitup_sample_30d.csv) | 最近 30 个交易日的全部涨停记录，14 列全字段 | 见上表 |
+| [`sample/sentiment_daily.csv`](sample/sentiment_daily.csv) | 每日涨停家数 / 一字板数 / 最高板 / 次日续板数 | 见图 |
 | [`sample/streak_stats.csv`](sample/streak_stats.csv) | 按连板数分组的次日期望与续板率 | 25 |
 | [`sample/fields.md`](sample/fields.md) | 字段说明 + 口径边界 + 已知缺陷 | — |
 
 字段（14 列）：`code` / `date` / `board`(MAIN,GEM,STAR,BJ) / `is_st` / `close_raw` / `limit_price` /
 `amount` / `turnover`(%) / `is_one_word` / `streak` / `next_open_gap` / `next_high_pct` / `next_close_pct` / `next_is_limit`。
 
-完整包（2021-01 → 2026-11-24，100,762 条 + 示例脚本 + 字段说明，zip 约 2.5 MB，pandas/duckdb 直读）：
+完整包（2021-01-11 起至最新交易日，行数见上方自动块；附示例脚本 + 字段说明，zip 约 2.5 MB，pandas/duckdb 直读）：
 **https://dangnianqin.github.io/astock-sample-library/limitup-db.html**
 
 ## 二、样板：策略体检报告（37 笔真实成交）

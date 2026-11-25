@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-25T17:06:35+08:00",
+ "updated_at": "2026-11-25T18:35:11+08:00",
  "last_trade_date": "2026-11-25",
  "rows": 100820,
  "trading_days": 1423,
@@ -35,6 +35,9 @@
  "sample": {
   "note": "免费样本，与 /live/ 同日刷新",
   "last_date": "2026-11-25",
+  "first_date": "2026-10-15",
+  "rows": 1834,
+  "trading_days": 30,
   "files": {
    "limitup_sample_30d.csv": 157816,
    "sentiment_daily.csv": 30167,
