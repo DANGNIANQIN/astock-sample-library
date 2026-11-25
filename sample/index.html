@@ -20,6 +20,31 @@ td,th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left}
 th{color:var(--muted);font-weight:600}
 .note{font-size:13px;color:var(--muted)}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "A股涨停/连板 免费样本（最近30个交易日全量）",
+  "description": "最近30个交易日的A股全部涨停明细，每行14列（代码/日期/板块/是否ST/收盘价/涨停价/成交额/换手/是否一字板/连板数/次日开盘缺口/次日最高涨幅/次日收盘涨幅/次日是否涨停），与付费全量版同一口径，由交易所日线独立复算。另含情绪日度与连板高度分布。可直接用 pandas / DuckDB / Excel 打开。",
+  "url": "https://dangnianqin.github.io/astock-sample-library/sample/",
+  "keywords": ["A股","涨停","连板","涨停板","一字板","量化回测","情绪面","limit up","A-share","quant","backtest","CN equity"],
+  "isAccessibleForFree": true,
+  "conditionsOfAccess": "免费样本，用于核验与试用；全量历史包（2021 起约 10 万行）为付费版，同一口径",
+  "license": "https://dangnianqin.github.io/astock-sample-library/sample/",
+  "creator": {"@type": "Organization", "name": "A股涨停连板数据"},
+  "publisher": {"@type": "Organization", "name": "A股涨停连板数据"},
+  "datePublished": "2026-10-15",
+  "dateModified": "2026-11-25",
+  "temporalCoverage": "2026-10-15/2026-11-25",
+  "spatialCoverage": {"@type": "Place", "name": "中国 A 股市场（沪/深/北）"},
+  "variableMeasured": ["涨停家数","连板高度","一字板占比","成交额","换手率","次日涨幅"],
+  "distribution": [
+    {"@type": "DataDownload", "name": "涨停明细（30 交易日全量）", "encodingFormat": "text/csv", "contentUrl": "https://dangnianqin.github.io/astock-sample-library/sample/limitup_sample_30d.csv"},
+    {"@type": "DataDownload", "name": "情绪日度", "encodingFormat": "text/csv", "contentUrl": "https://dangnianqin.github.io/astock-sample-library/sample/sentiment_daily.csv"},
+    {"@type": "DataDownload", "name": "连板高度统计", "encodingFormat": "text/csv", "contentUrl": "https://dangnianqin.github.io/astock-sample-library/sample/streak_stats.csv"}
+  ]
+}
+</script>
 </head>
 <body>
 <main>
