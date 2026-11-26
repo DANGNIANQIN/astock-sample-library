@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股涨停题材归因数据 · 每个涨停归属于哪个题材、谁在带队</title>
+<meta name="description" content="A股涨停题材归因数据集：2025-至今 33,611 条涨停逐条归因到具体概念题材，附题材当日涨停率、梯队高度、龙头股、次日接力率。含免费30交易日样本 CSV。">
+<style>
+body{font:16px/1.75 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:760px;margin:6vh auto;padding:0 20px;color:#222}
+h1{font-size:24px;line-height:1.35}h2{font-size:18px;margin-top:34px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:14px 0}
+th,td{border:1px solid #e3e3e3;padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#fafafa;font-weight:600}
+code{background:#f4f4f4;padding:1px 5px;border-radius:4px;font-size:13px}
+a{color:#0b6bcb}
+.box{border:1px solid #e3e3e3;border-radius:12px;padding:18px;margin:18px 0;background:#fcfcfc}
+.g{color:#0a7d3c;font-weight:600}.r{color:#b3261e}
+.small{color:#666;font-size:13px}
+</style></head>
+<body>
+
+<h1>A股涨停题材归因数据：33,611 条涨停，逐条归因到具体题材</h1>
+
+<p>原始涨停明细只告诉你「谁涨停了、几板」，不告诉你<b>为什么是这个板块在动、谁在带队</b>。
+这份数据把 2025-01-02 至今（截至 2026-11-26）的 <b>33,611 条涨停逐条归因</b>到一个具体概念题材，
+并给出该题材当日的强度、梯队、龙头与次日接力率。</p>
+
+<h2>先看免费样本（30 个交易日真数据，不是编的）</h2>
+<div class="box">
+<p><a href="sample/theme_attr_sample_30d.csv"><b>① 涨停题材归因样本（1,748 行 · 23 列）</b></a></p>
+<p><a href="sample/theme_strength_sample_30d.csv"><b>② 题材强度日度样本（4,188 行 · 21 列）</b></a></p>
+<p class="small">区间 2026-10-16 ~ 2026-11-26，UTF-8 BOM，Excel 直接打开不乱码。</p>
+</div>
+
+<h2>字段长什么样</h2>
+<table>
+<tr><th>字段</th><th>例子</th><th>说明</th></tr>
+<tr><td>代码 / 名称</td><td>603030 全筑股份</td><td>—</td></tr>
+<tr><td>连板数</td><td>3</td><td>当日是该段连板第几板（跨周末/停牌不断段）</td></tr>
+<tr><td>主归因题材</td><td>装配建筑</td><td>该股命中的题材里，当日被点燃得最充分的那个</td></tr>
+<tr><td>主归因题材涨停率</td><td>0.0612</td><td>该题材 98 只成分里有 6 只涨停 = 6.1%</td></tr>
+<tr><td>该题材当日最高连板</td><td>3</td><td>梯队高度</td></tr>
+<tr><td>归因类型</td><td><span class="g">主线</span></td><td>主线 / 梯队 / 弱跟风 / <span class="r">孤立</span></td></tr>
+<tr><td>是否题材龙头</td><td>1</td><td>该股在题材内连板最高（并列取成交额大）</td></tr>
+<tr><td>次日再涨停</td><td>0</td><td>题材接力的直接证据</td></tr>
+</table>
+
+<h2>为什么按「涨停率」排，不按「涨停家数」</h2>
+<p>绝对家数永远偏袒大板块：「一带一路」「人工智能」「物联网」成分都是 400 只，随便哪天都有 8~10 只涨停；
+而「人形机器人」只有 80 只成分、3 只涨停，其实动得更充分。
+所以主归因排序是：<b>先剔除被截断的题材（成分恰达 400），再按涨停率排，同率看最高连板</b>。</p>
+
+<h2>四种「归因类型」的判据（写死、可复算）</h2>
+<table>
+<tr><th>类型</th><th>判据</th><th>怎么用</th></tr>
+<tr><td><b>主线</b></td><td>题材涨停率 ≥5% 且 涨停≥3 只，<b>或</b> 最高连板≥3 且 涨停≥3 只</td><td>板块真在动，跟风有承接</td></tr>
+<tr><td><b>梯队</b></td><td>该题材当日涨停 ≥3 只，未达主线强度</td><td>成队了，但龙头不明</td></tr>
+<tr><td><b>弱跟风</b></td><td>该题材当日涨停 = 2 只</td><td>两只票互相壮胆，不成板块</td></tr>
+<tr><td><b>孤立</b></td><td>该题材当日涨停 ≤1 只</td><td><b>独苗妖股</b>：连板越高越危险，没有板块承接</td></tr>
+</table>
+
+<h2>覆盖与边界（先说不行的）</h2>
+<ul>
+<li>区间 2025-01-02 ~ 2026-11-26，<b>460 个交易日、33,611 条涨停</b>，日均 73.1 只；另有题材层 69,802 行 / 249 个题材。</li>
+<li>覆盖率 <b>95.3%</b>：1,666 条涨停（4.7%）没有任何本地题材命中（新股、退市整理、冷门小票），不出表。</li>
+<li>题材映射来自本地通达信概念板块（249 个），不是全市场概念库，冷门题材可能没有对应条目。</li>
+<li>成分恰为 400 的 10 个题材存在板块文件截断（涨停家数偏低估），已用「是否截断」列标出并不参与主归因排序。</li>
+<li>次日收益是<b>收盘口径参考值</b>，不是可交易收益——A 股 T+1，涨停当日既买不进也卖不出。</li>
+<li>本页是<b>数据整理</b>：不荐股、不预测涨跌、不承诺任何收益。据此交易的风险由你自己承担。</li>
+</ul>
+
+<h2>怎么拿全量</h2>
+<div class="box">
+<p>全量包（两个 CSV + 口径说明，约 3.0 MB）：<b>闲鱼搜「A股涨停数据」或「涨停题材归因」</b>，自动发货。</p>
+<p class="small">样本先看、对味再买；不对味直接说，不用花钱。数据每日收盘后更新。</p>
+</div>
+
+<p class="small"><a href="index.html">← 返回数据样本库</a> · 更新至 2026-11-26</p>
+</body></html>
