@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股历史ST状态怎么查：单名单的两个方向都错 | 九重映画</title>
+<meta name="description" content="A股历史ST状态(point-in-time)为什么拿不到：单快照会回填过头、也会整段丢失。用价格证据重建ST日下界：2021-2026 实测 9,527 个可证实ST日、414只、零白马误报。附免费CSV。">
+<style>
+body{max-width:860px;margin:2rem auto;padding:0 1rem;font:16px/1.75 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#1c1c1e}
+h1{font-size:1.6rem;line-height:1.3}h2{margin-top:2.2rem;border-left:4px solid #0a84ff;padding-left:.6rem}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.94rem}
+th,td{border:1px solid #d8d8dc;padding:.45rem .6rem;text-align:left}th{background:#f5f5f7}
+code{background:#f2f2f4;padding:.1rem .3rem;border-radius:3px;font-size:.9em}
+pre{background:#1c1c1e;color:#f2f2f4;padding:.9rem;border-radius:6px;overflow-x:auto;font-size:.86rem}
+.note{background:#fff8e6;border-left:4px solid #f5a623;padding:.7rem .9rem;margin:1rem 0}
+.cta{background:#f0f7ff;border:1px solid #cfe3ff;border-radius:8px;padding:1rem;margin:2rem 0}
+</style>
+</head>
+<body>
+<h1>历史 ST 状态：为什么「拿一份 ST 名单」永远是错的</h1>
+<p>做 A 股回测，只要涉及「剔除 ST」，就必须知道 <b>每只票在每个历史交易日</b>是否处于风险警示。绝大多数数据源只给<b>当前</b>名单——包括交易所行情软件和主流第三方。</p>
+
+<h2>一、单快照错在两个方向，不只是「不全」</h2>
+<table>
+<tr><th>错误方向</th><th>机制</th><th>我们库里的实测（2021-01-04→2026-11-26，7,308,957 行 / 5,874 只）</th></tr>
+<tr><td><b>回填过头</b></td><td>今天是 ST 的票，被当成「历史上一直 ST」</td><td>312 只被标 ST 的票里 <b>0 只</b>有过摘帽（6 年零解除风险警示，真实市场不可能）；其中 <b>86 只 / 2,227 行</b>在 2026-08 前出现 <code>|涨幅| &gt; 11%</code>，最大 <b>95.78%</b>——5% 限幅下物理上不可能</td></tr>
+<tr><td><b>整段丢失</b></td><td>曾 ST、已摘帽的票，历史 ST 段全没了</td><td><b>261 只 / 5,918 天</b>可证实的 ST 日完全不在名单里。例：<code>600599</code> 2021–2025 每年最大日涨跌 = 5.12 / 5.05 / 5.03 / 5.04 / 5.06，整五年按 5% 限幅运行，但现名不带 ST，历史记录为 0</td></tr>
+</table>
+
+<h2>二、价格本身就带信息：ST 日可以重建出「下界」</h2>
+<p>主板风险警示股涨跌幅 5%、普通股 10%。所以：</p>
+<pre>某日 close == round(preclose×1.05, 2)  且  close == high
+⇒ 当日限幅必为 5% ⇒ 当日处于风险警示</pre>
+<p>单条判据会有巧合（稳健大盘股偶尔恰好收在 +5.00%），所以加三重闸：</p>
+<ol>
+<li>上面的封板判据；</li>
+<li>该日前后各 10 个交易日内 <code>max(high/preclose−1) ≤ 5.15%</code> 且 <code>max|涨幅| ≤ 5.15%</code>（真 10% 的票在 21 天里几乎必超）；</li>
+<li>同票同段（相邻 ≤60 自然日）命中 ≥2 天。</li>
+</ol>
+<table>
+<tr><th>实测产出</th><th>数字</th></tr>
+<tr><td>可证实 ST 段 / 只数 / 天数（2021-01-04 → 2026-07-31）</td><td><b>902 段 / 414 只 / 9,527 天</b></td></tr>
+<tr><td>假阳性标定（20 只从未 ST 的白马：600519 等）</td><td><b>命中 0 只</b></td></tr>
+<tr><td>静态名单遗漏的量</td><td>261 只 / 5,918 天</td></tr>
+</table>
+
+<div class="note"><b>边界（引用时必须写）</b>：① 只能证「是 ST」，不能证「不是 ST」；② 只覆盖 <b>2026-07-31 之前</b>——2026-08-03 起主板 ST 限幅改为 10%（实测：最后一个 5% 封板日 2026-07-31；8 月后被标 ST 的票出现 10% 封板 191 行 / 83 只，如 600243 2026-11-23 <b>+10.08%</b>），此后 ST 与普通股价格上不可区分；③ 段内偶有未触板日并入，给的是区间不是逐日真值。</div>
+
+<h2>三、正确的工程做法：三态，不是布尔</h2>
+<pre>st_state(code, date) ∈ { KNOWN_ST, KNOWN_NORMAL, UNKNOWN }
+
+UNKNOWN 的来源优先级：
+  ① 自建每日快照（今天起，前向积累）
+  ② 价格下界重建（只给 KNOWN_ST，2021 起）
+  ③ 其余 = UNKNOWN
+
+下游：只对 KNOWN_NORMAL 放行；KNOWN_ST / UNKNOWN 一律剔除或报错
+      ——「未知当正常」是最贵的默认值</pre>
+<p>回测报告里必须打一行覆盖度：<code>剔除ST：已知正常 X% / 已知ST Y% / 未知 Z%</code>。Z 有多大是可以量化的，别省略。</p>
+
+<h2>四、顺手钉死两个会错的细节</h2>
+<p><b>涨跌停价取整不能用 float。</b>对 1.00–50.00 元共 4,900 个前收价逐位比对 Decimal 半进位与 <code>round(float)</code>：涨停价 <b>64/4,900 (1.3%)</b> 不一致（前收 1.15 → 应 1.27，float 给 1.26），跌停价 <b>174/4,900 (3.6%)</b> 不一致（前收 1.25 → 应 1.13，float 给 1.12）。一分钱决定封板/未封板，进而决定能否成交。</p>
+<p><b>日频「涨停不能买」错 1/3。</b>主板 2021-01-04→2026-11-26：涨停触板 118,179 次，全天封死 78,937、盘中开板过 <b>39,242（33.21%）</b>；跌停触板 46,742 次，封死 26,390、开板 <b>20,352（43.51%）</b>。接口至少返回 <code>SEALED / LIKELY_FILLABLE / UNKNOWN</code> 三态。</p>
+
+<div class="cta">
+<b>免费下载</b><br>
+· ST 日下界样本（200 段真实区间，CSV）：<a href="sample/st_lowerbound_sample.csv">sample/st_lowerbound_sample.csv</a><br>
+· 涨停数据口径体检脚本（纯 stdlib，<code>--selftest</code> 自校验）：<a href="tools/caliber_check.py">tools/caliber_check.py</a><br>
+· 完整 6 年涨停/连板数据集（含口径说明与已知缺陷自述）：<a href="https://www.goofish.com/" rel="nofollow">闲鱼「A股股票数据 每日自动更新」</a>　或 <a href="limitup-theme.html">数据说明页</a>
+</div>
+
+<p style="color:#6b6b70;font-size:.86rem;margin-top:2.5rem">数据自查报告：本页所有数字来自 <code>v_kline_adj</code> 直查，生成脚本 <code>build_st_lowerbound.py</code> 与审计记录随数据包发布。方法公开，可用自己的行情复算——若差得远，先对齐 preclose 的复权/除权口径。</p>
+</body>
+</html>
