@@ -1,47 +1,47 @@
 {
- "updated_at": "2026-11-26T15:32:57+08:00",
+ "updated_at": "2026-11-27T03:56:37+08:00",
  "last_trade_date": "2026-11-26",
- "rows": 100890,
+ "rows": 98718,
  "trading_days": 1424,
  "latest": {
   "limit_up": 70,
   "streak2plus": 17,
   "one_word": 7,
   "max_streak": 5,
-  "st_count": 6,
-  "excl_st": 64,
-  "caliber_note": "本表包含 ST（东财涨停池默认剔除 ST，同一天我们的家数会比它多出 ST 那一部分）"
+  "st_count": null,
+  "excl_st": null,
+  "caliber_note": "2026-08-03 起主板 ST 涨跌幅也是 10%，价格上无法识别 ST，本字段留空（不给假 0）"
  },
  "preview": {
-  "note": "公开页只放窗口预览；全量 2021 起（约 100890 行）在付费包里",
+  "note": "公开页只放窗口预览；全量 2021 起（约 98718 行）在付费包里",
   "detail_days": 40,
-  "detail_rows": 2372,
+  "detail_rows": 2341,
   "detail_covers_trading_days": 40,
   "senti_days": 120,
   "files": {
-   "涨停明细_近40交易日.csv": 204118,
-   "情绪日度_近120交易日.csv": 8482,
-   "连板统计.csv": 1396
+   "涨停明细_近40交易日.csv": 231313,
+   "情绪日度_近120交易日.csv": 8554,
+   "连板统计.csv": 1221
   }
  },
  "full": {
   "note": "本地导出，不上公网",
   "files": {
-   "涨停明细_2021-2026.csv": 8666348,
-   "情绪日度.csv": 100826,
-   "连板统计.csv": 1396
+   "涨停明细_2021-2026.csv": 9735643,
+   "情绪日度.csv": 100581,
+   "连板统计.csv": 1221
   }
  },
  "sample": {
   "note": "免费样本，与 /live/ 同日刷新",
   "last_date": "2026-11-26",
   "first_date": "2026-10-16",
-  "rows": 1868,
+  "rows": 1842,
   "trading_days": 30,
   "files": {
-   "limitup_sample_30d.csv": 160438,
-   "sentiment_daily.csv": 30188,
-   "streak_stats.csv": 1396
+   "limitup_sample_30d.csv": 181673,
+   "sentiment_daily.csv": 30129,
+   "streak_stats.csv": 1221
   }
  }
 }
