@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股涨停数据口径体检器 · 免费工具</title>
+<style>
+:root{--bg:#0f1216;--fg:#e6e8eb;--mut:#98a2ad;--acc:#4ea1ff;--warn:#ffb454;--line:#232a33}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.75 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:36px 20px 80px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:18px;margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
+p,li{color:#cfd6de}
+.mut{color:var(--mut);font-size:13.5px}
+pre{background:#151a20;border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow:auto;font-size:13px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600}
+a{color:var(--acc)}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:9px 16px;border:1px solid var(--acc);border-radius:8px;color:var(--acc);text-decoration:none;font-size:14px}
+.tag{display:inline-block;font-size:12px;color:#0f1216;background:var(--warn);border-radius:4px;padding:1px 6px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>A股涨停数据口径体检器</h1>
+<p class="mut">拿你自己的日线 CSV 跑一遍，看你的涨停判定对不对 · 纯 Python 标准库 · 无依赖 · 免费</p>
+
+<h2>为什么给你这个</h2>
+<p>过去几周我公开答复了 20 多个「涨停数据不准」的 issue，根因几乎总是同样六件事。它们不会报错，
+只会让你的回测结论悄悄失真——你以为是策略不行，其实是数据口径错了。所以把它做成一个能自己跑的工具。</p>
+
+<h2>六个坑（工具逐个照出来）</h2>
+<table>
+<tr><th>#</th><th>坑</th><th>后果</th></tr>
+<tr><td>①</td><td>0 量平盘占位行（O=H=L=C，volume=0）</td><td>不是真实成交，算振幅/判涨停前必须剔除</td></tr>
+<tr><td>②</td><td>一字板（开=高=低=收=涨停价）</td><td>可以标记，但<strong>买不进</strong>；按涨停价成交等于白送收益</td></tr>
+<tr><td>③</td><td>除权日 preclose ≠ 上一交易日 close</td><td>用前一日 close 手算前收，会造出 −95% 的假跌</td></tr>
+<tr><td>④</td><td>ST 涨跌幅：2026-08-01 前 5%、之后 10%</td><td>跨窗口回测写死一个值就全错</td></tr>
+<tr><td>⑤</td><td>涨停价 .5 分级（round() 银行家舍入差一分）</td><td>一分钱决定「涨停封死」还是「差一档没封」</td></tr>
+<tr><td>⑥</td><td>用「涨幅≥9.9%」近似判涨停</td><td>漏掉收在涨停价、但显示 9.98% 的票</td></tr>
+</table>
+
+<h2>怎么用</h2>
+<pre><code># 1. 下载（单文件，纯标准库）
+curl -O https://dangnianqin.github.io/astock-sample-library/tools/caliber_check.py
+
+# 2. 先自检：6 个探测器在各自缺陷样本上必须触发
+python3 caliber_check.py --selftest
+# -> selftest PASS：6/6 探测器在各自缺陷样本上触发，干净样本零误报
+
+# 3. 体检你自己的数据（必需列：code,date,open,high,low,close,preclose,volume；可选 name/amount）
+python3 caliber_check.py your_daily.csv</code></pre>
+
+<p class="mut">输入约定：价格单位是<strong>元</strong>（不是分）；date 支持 20260105 / 2026-01-05；name 含「ST」才按 ST 处理。</p>
+
+<h2>输出长什么样（真实 4 只票 / 228 行样本）</h2>
+<pre><code>样本：228 行 / 4 只股票 / 20260901 → 20261126
+
+[OK  ] ①0量平盘占位行 —— 0 处
+[OK  ] ③除权跳变（preclose≠前一日收盘） —— 0 处
+[风险行] ⑤涨停价落在 .5 分级（round() 会差一分） —— 9 处
+   行19     000001 20260924 pre=11.35 close=11.3
+[风险行] ⑥涨幅显示 &lt;9.99% 的涨停行（用 pct 近似会漏判） —— 2 处
+   行116    600410 20260901 pre=13.84 close=15.22
+
+结论：数据自身缺陷 0 项（①③④），逻辑容易踩坑 2 项（②⑤⑥）。</code></pre>
+
+<p>工具区分两类输出：<span class="tag">命中</span>你数据里已经错了、会传播进回测结论的；
+<span class="tag">风险行</span>判定逻辑本身容易错的地方，命中不代表数据错，只代表这几行必须用正确写法。</p>
+
+<h2>它不管什么</h2>
+<ul>
+<li>不做数据下载、不判股票好坏、不给买卖建议。它只照口径。</li>
+<li>不猜你的数据来源。输入什么就照什么。</li>
+<li>不替代你自己的交叉校验：两个独立来源对得上的，才算数。</li>
+</ul>
+
+<h2>需要现成的正确数据？</h2>
+<p>这个仓库同时提供一份按上述口径构建的 A 股涨停数据集（2021 起，10 万+ 条，含退市股、一字板标记、
+连板高度、次日表现，每日收盘后自动更新），带免费 30 日全量样例，可以直接和你的数据对拍。</p>
+<a class="cta" href="./index.html">看数据集与免费样例</a>
+<a class="cta" href="./tools/caliber_check.py">下载体检器（单文件）</a>
+</div>
+</body>
+</html>

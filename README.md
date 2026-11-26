@@ -5,6 +5,18 @@
 
 > 别人给的是「今天的涨停池」，这里给的是**从 2021 年起 10 万+ 条的全量涨停数据**（含退市股、一字板标记、连板高度、次日表现），每天收盘后自动更新。
 
+## 零、先给你一个免费工具：涨停口径体检器
+
+`tools/caliber_check.py`（单文件、纯 Python 标准库、`--selftest` 自检）—— 拿你自己的日线 CSV 跑一遍，
+把六件会让涨停判定悄悄失真的坑逐个照出来（0 量占位行 / 一字板买不进 / 除权日 preclose≠前收 / ST 跨 2026-08 分段 /
+涨停价 .5 分级的四舍五入差一分 / 用涨幅≥9.9% 近似判涨停漏判）。说明页：[`caliber-check.html`](caliber-check.html)
+
+```bash
+curl -O https://dangnianqin.github.io/astock-sample-library/tools/caliber_check.py
+python3 caliber_check.py --selftest
+python3 caliber_check.py your_daily.csv
+```
+
 ## 一、涨停数据集（免费样例就在本仓库）
 
 6 年 / 5,370 只股票（含退市股），每条带连板高度、一字板标记、
