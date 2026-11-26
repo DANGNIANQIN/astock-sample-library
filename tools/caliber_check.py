@@ -87,7 +87,7 @@ def is_limit_up(row):
 
 
 def check(rows):
-    """六个探测器：每个返回 (名称, 命中列表, 说明)。"""
+    """八个探测器：每个返回 (名称, 命中列表, 说明)。"""
     by_code = defaultdict(list)
     for r in rows:
         by_code[r["code"]].append(r)
@@ -145,6 +145,27 @@ def check(rows):
 
             prev = r
 
+    # ⑧ 基准价被「等值替换」：某交易日全市场 close == preclose（收益恰好为 0）
+    #    典型成因是复权/快照脚本把「上一行收盘价」当成除权因子反乘回历史，
+    #    于是历史最后一天的价格被替换成下一交易日收盘价 —— 该交易日横截面收益恒为 0。
+    by_date = defaultdict(list)
+    for r in rows:
+        by_date[r["date"]].append(r)
+    zero_ret_day = []
+    first_date = min(by_date) if by_date else None   # 样本首日没有前置基准，不作断言
+    for d, bars in sorted(by_date.items()):
+        if d == first_date:
+            continue
+        live = [b for b in bars if b["volume"] > 0 and b["preclose"] > 0]
+        if len(live) < 50:      # 样本太小不作断言
+            continue
+        flat = sum(1 for b in live if b["close"] == b["preclose"])
+        share = flat / len(live)
+        if share >= Decimal("0.25"):
+            zero_ret_day.append({"line": "-", "code": "全市场(%d只)" % len(live),
+                                 "date": d, "preclose": "%d 只平盘" % flat,
+                                 "close": "占比 %.1f%%" % (share * 100)})
+
     return [
         ("①0量平盘占位行", zero_vol_flat,
          "O=H=L=C 且 volume=0 = 前收填充的占位 bar（常见于分钟线上卷成日线、或停牌日补前收）。"
@@ -172,6 +193,14 @@ def check(rows):
          "③ 名称是旧快照、已摘帽。先看该股的上市/风险警示公告排除②，再按价格证据定①。"
          "顺带一提反方向（历史 ST、现名不带 ST）单行无法证伪，需要 ±10 日窗口的价格证据，"
          "方法与全量对账见 st-history.html。"),
+        ("⑧某日全市场平盘率异常（基准价被等值替换）", zero_ret_day,
+         "单个交易日里 >25% 的股票「收盘价 == 前收盘价」且当日有成交量——真实市场不可能出现"
+         "（全市场日收益横截面标准差约 3%，平盘率常态 2~5%）。命中说明该日的**基准价被换成了别的价格**，"
+         "最常见是复权脚本把「下一交易日收盘价」当除权因子反乘回历史：于是历史最后一天 close 被替换成次日 close，"
+         "该交易日收益恒等于 0、横截面方差为 0。后果不是「略偏」而是**信息全丢**："
+         "所有以该日为基准或终点算的 IC / 因子收益都变成噪声（实测某全市场 5,570 只的日子，"
+         "污染后收益横截面标准差 4.3e-17，1 日窗 IC 从 +0.206 变 -0.022 的纯浮点噪声）。"
+         "正确做法：除权乘子只能来自除权事件表，永远不要用相邻两行收盘价比值估计；缺口日只允许跳过并标记。"),
     ]
 
 
@@ -198,7 +227,7 @@ def report(rows, out=sys.stdout):
             if len(hits) > 5:
                 print("   …另 %d 处" % (len(hits) - 5), file=out)
         print("   " + why, file=out)
-    print("\n结论：数据自身缺陷 %d 项（①③④⑦），逻辑容易踩坑 %d 项（②⑤⑥）。"
+    print("\n结论：数据自身缺陷 %d 项（①③④⑦⑧），逻辑容易踩坑 %d 项（②⑤⑥）。"
           "标「命中」的是你数据里已经错了、会悄悄传播进回测结论的；标「风险行」的是判定逻辑本身容易错的地方，"
           "命中不代表数据错，代表你的代码在这几行必须用正确写法。" % (bad, risk), file=out)
     return bad
@@ -260,7 +289,31 @@ def selftest():
     j2 = [_mk("600010", "20260105", "10.2", "10.52", "10.1", "10.52", "10.00", 1000, "ST某某")]
     assert len(dict((n, x) for n, x, _ in check(j2))["⑦ST 名下涨跌幅超过 5.15%（按 5% 限幅判这一天就一定错）"]) == 1
 
-    print("selftest PASS：7/7 探测器在各自缺陷样本上触发，干净样本零误报", file=sys.stdout)
+    # ⑧ 某日全市场平盘率异常（基准价被等值替换）：100 只里 100 只 close==preclose
+    def _mk_day(n, date, flat_cnt):
+        out = []
+        for i in range(n):
+            code = "60%04d" % (2000 + i)
+            out.append(_mk(code, "20260102", "10.10", "10.20", "10.05", "10.15", "10.00"))  # 前置基准日
+            if i < flat_cnt:
+                out.append(_mk(code, date, "10.15", "10.15", "10.15", "10.15", "10.15"))
+            else:
+                out.append(_mk(code, date, "10.25", "10.45", "10.20", "10.38", "10.15"))
+        return out
+
+    k8 = _mk_day(100, "20260105", 100)          # 全市场恒零收益 → 必报
+    n8 = dict((x, h) for x, h, _ in check(k8))
+    assert len(n8["⑧某日全市场平盘率异常（基准价被等值替换）"]) == 1
+    # 边界钉死：24% 不报、26% 报（阈值 25%，改阈值必须让自检红）
+    assert not dict((x, h) for x, h, _ in check(_mk_day(100, "20260106", 24)))[
+        "⑧某日全市场平盘率异常（基准价被等值替换）"]
+    assert len(dict((x, h) for x, h, _ in check(_mk_day(100, "20260107", 26)))[
+        "⑧某日全市场平盘率异常（基准价被等值替换）"]) == 1
+    # 样本量门槛：49 只全平盘不报（小样本不作断言）
+    assert not dict((x, h) for x, h, _ in check(_mk_day(49, "20260108", 49)))[
+        "⑧某日全市场平盘率异常（基准价被等值替换）"]
+
+    print("selftest PASS：8/8 探测器在各自缺陷样本上触发，干净样本零误报", file=sys.stdout)
     return 0
 
 
