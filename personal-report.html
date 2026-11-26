@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>涨停数据体检报告（按你的股票池）· 交付说明</title>
+<style>
+:root{--bg:#0f1216;--fg:#e6e8eb;--mut:#98a2ad;--acc:#4ea1ff;--warn:#ffb454;--line:#232a33}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.75 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:36px 20px 80px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:18px;margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
+p,li{color:#cfd6de}
+.mut{color:var(--mut);font-size:13.5px}
+pre{background:#151a20;border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow:auto;font-size:13px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600}
+a{color:var(--acc)}
+.cta{display:inline-block;margin:8px 10px 0 0;padding:9px 16px;border:1px solid var(--acc);border-radius:8px;color:var(--acc);text-decoration:none;font-size:14px}
+.tag{display:inline-block;font-size:12px;color:#0f1216;background:var(--warn);border-radius:4px;padding:1px 6px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>涨停数据体检报告（按你的股票池）</h1>
+<p class="mut">把你手上的自选股给我，我出一份可复算的涨停 / 连板 / 题材归因底稿 · 2021 年至今全量 · 附完整明细 CSV</p>
+
+<h2>这是什么，为什么有人需要</h2>
+<p>绝大多数人手里的涨停数据是「行情商给的」，而行情商的涨停判定至少有七个地方会错：涨跌幅上限按字段不按规则、
+ST 状态按现名回填、除权日拿前收手算、一字板按涨停价算成交、0 量占位行当真成交……
+这些错不会报错，只会让你的复盘和回测悄悄失真——你以为策略不行，其实是数据口径错了。</p>
+<p>这份报告不卖数据文件（数据文件在另一个链接里，¥9.9 起）。它卖的是<strong>按你的池子做一遍体检</strong>：
+每只票的每一次涨停、连板高度、一字板、题材归因、次日已实现表现，逐行给出，并附一份口径体检证明它自己没错。</p>
+
+<h2>你拿到什么</h2>
+<table>
+<tr><th>#</th><th>交付物</th><th>内容</th></tr>
+<tr><td>1</td><td>报告正文（Markdown）</td><td>口径说明 → 概览表 → 逐票明细 → 口径体检 → 不做什么</td></tr>
+<tr><td>2</td><td>完整明细 CSV</td><td>每一条涨停一行，20 列：日期/板块/连板/一字/上限来源/成交额/换手/次日三项/主归因题材×3</td></tr>
+<tr><td>3</td><td>口径体检表</td><td>4 项断言（收盘价必须落在涨停价上 / 上限来源可解释 / 连板数≥1 / 无重复行），任一项不过我不出报告</td></tr>
+</table>
+<p class="mut">窗口：2021-01-11 起至最新交易日（当前 2026-11-26）。单份最多 60 只标的。</p>
+
+<h2>样例（真实跑出来的，可直接下载核对）</h2>
+<p>5 只标的、205 条涨停记录。里面特意放了两个对照组：<code>000001 平安银行</code>（6 年只涨停 2 次）和
+<code>600519 贵州茅台</code>（6 年 0 次涨停）——「0 次涨停」和「0 条数据」是两件事，报告会明确区分。</p>
+<a class="cta" href="sample/personal_report_sample.md">下载样例报告（Markdown）</a>
+<a class="cta" href="sample/personal_report_sample_all_events.csv">下载样例明细（CSV 205 行）</a>
+
+<pre>| 代码 | 名称 | 区间涨停次数 | 最高连板 | 一字板 | 首板次数 | 最近一次涨停 |
+|---|---|---|---|---|---|---|
+| 000678 | 襄阳轴承 | 72 | 7 | 5 | 47 | 2026-11-26 |
+| 002197 | 证通电子 | 70 | 5 | 9 | 49 | 2026-11-26 |
+| 600410 | 华胜天成 | 61 | 8 | 3 | 44 | 2026-11-18 |
+| 000001 | 平安银行 | 2 | 1 | 0 | 2 | 2024-02-21 |
+| 600519 | 贵州茅台 | 0 | — | — | — | 窗口内从未涨停 |</pre>
+<p class="mut">逐票明细长这样（襄阳轴承最近几次）：</p>
+<pre>| 日期 | 连板 | 一字 | 涨幅上限来源 | 成交额(亿) | 换手% | 次日开盘 | 次日最高 | 次日收盘 | 主归因题材 |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-11-10 | 1 | 否 | 主板 10%上限 | 13.03 | 15.35 | +7.84% | +10.02% | +10.02% | 减速器(4/96) |
+| 2026-11-11 | 2 | 否 | 主板 10%上限 | 34.51 | 37.39 | +6.61% | +10.00% | +3.54% | 减速器(8/96) |
+| 2026-11-23 | 1 | 否 | 主板 10%上限 | 24.48 | 29.94 | -0.54% | +8.62% | +4.82% | 减速器(12/96) |</pre>
+
+<h2>口径（写死在报告里，可逐条复核）</h2>
+<ol>
+<li><strong>涨停</strong>＝不复权收盘价落在当日涨停价上（容差 ±0.02 元），不是「涨幅接近 10%」。</li>
+<li><strong>上限按交易所规则恒定</strong>：主板 10%（历史上 ST 为 5%，2026-08-03 起 ST 亦 10%）、创业板/科创板 20%、北交所 30%。不信行情商字段。</li>
+<li><strong>连板数</strong>在完整交易日序列上算，跨停牌、跨周末不错位。</li>
+<li><strong>次日表现</strong>只在次日确实有成交时给出；停牌/退市留空，不拿前收盘价填空。</li>
+<li><strong>题材归因</strong>只用真正的<strong>概念板块</strong>，「昨日涨停」「久不分红」「融资融券」这类事后统计标签一律不计入。</li>
+<li><strong>涨停价算不准一分钱就判错</strong>：8.15×0.9 用浮点是 7.33，交易所是 7.34，这一分钱决定当天是不是封死。</li>
+</ol>
+
+<h2>价位</h2>
+<table>
+<tr><th>档</th><th>标的数</th><th>价格</th><th>交付时间</th></tr>
+<tr><td>单池</td><td>≤ 10 只</td><td>¥49</td><td>下单后 6 小时内</td></tr>
+<tr><td>标准</td><td>≤ 30 只</td><td>¥99</td><td>下单后 6 小时内</td></tr>
+<tr><td>全量</td><td>≤ 60 只</td><td>¥149</td><td>下单后 12 小时内</td></tr>
+</table>
+<p class="mut">先给样例再收款：上面两个样例你可以先下载核对，觉得口径对得上再来。需要额外维度（龙虎榜席位、资金流、分时形态）先聊，能做的报加价，做不了的直说。</p>
+
+<h2>不做什么</h2>
+<ul>
+<li>不给买卖建议、不给目标价、不推荐标的。</li>
+<li>不预测涨跌。报告里所有数字都是<strong>已发生</strong>的事实。</li>
+<li>不承诺收益。历史涨停表现与未来收益没有必然关系。</li>
+<li>不做「帮你改成赚钱的回测」——只保证数据口径对，策略是你的事。</li>
+</ul>
+
+<h2>怎么下单</h2>
+<p>闲鱼搜「涨停连板数据」或「A股涨停数据」找到我的店，私聊把你的代码列表发过来（逗号或换行分隔都行），
+确认档位后我发报告 + CSV。也可以直接先用免费工具自查：</p>
+<a class="cta" href="caliber-check.html">免费：涨停数据口径体检器</a>
+<a class="cta" href="limitup-db.html">付费数据包（¥9.9 起）</a>
+<a class="cta" href="pipeline.html">数据管道代搭（B 端）</a>
+<p class="mut">历史数据说明：2021 年前的数据不纳入（那时的涨停制度与现在差异过大，纳进来是噪音）。</p>
+</div>
+</body>
+</html>
