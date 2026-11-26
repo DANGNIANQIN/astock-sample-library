@@ -80,6 +80,23 @@ UNKNOWN 的来源优先级：
 <p class="small">重建脚本 <code>rebuild_limit_up_cap.py</code>（全量 5 秒，六项自检不过即拒跑）；旧表完整保留为 <code>limit_up_v1</code> 可回滚。
 北交所 30% 档召回仍只有 52.5%，缺口如实标在包的字段说明里，没有硬填。</p>
 
+<h2>六、连我们自己的 ST 区间表也是错的（第 7 处自伤，已修）</h2>
+<p>写完上面四节，我们回头查了自己仓库里的 <code>st_intervals.csv</code>——文件名和说明都写着「历史 ST 状态区间表（point-in-time）」，</p>
+<p>实际是<b>直接拿行情接口的 <code>is_st</code> 切段</b>。指纹一眼就能看出来：输出恰好 312 只票、312 个段、<b>每只票全程只有 1 段、0 只摘帽</b>。</p>
+<p>一家公司被 ST 又摘帽是常态，六年间 0 次摘帽不是数据，是静态回填的形状。于是用价格证据重做，并把两版逐日对账：</p>
+<table>
+<tr><th>指标</th><th>旧版（静态回填）</th><th>新版（价格证据）</th></tr>
+<tr><td>股票数</td><td>312 只</td><td>414 只</td></tr>
+<tr><td>段数</td><td>312 段（每只仅 1 段、0 摘帽）</td><td><b class="g">902 段</b></td></tr>
+<tr><td>声称的 ST 交易日</td><td>367,586 天</td><td>9,527 天（<b>只给可证实部分</b>）</td></tr>
+<tr><td><b>可证伪的天数</b></td><td><b>51,901 天 / 286 只（14.1%）</b>：这些天旧版说「是 ST」，当天涨跌幅却超过 5.15%——ST 限幅 5%，数学上不可能</td><td>0（自检项，交集必须为空）</td></tr>
+<tr><td>两版都认的票</td><td colspan="2">153 只（占旧版 49%）· 旧版无任何价格证据 159 只（其中 133 只段内确有 >5.15% 的日子＝至少那段标错，26 只不可判定）· 旧版整段漏标 261 只</td></tr>
+</table>
+<p>这条最有用的地方是<b>不需要任何外部数据源就能自我推翻</b>：拿旧表自己的区间去 join 自己的行情，10 秒就能算出来。</p>
+<p>新版只给「可证实的下界」，并在文档里写死一句话：<b>拿它做「剔除 ST」会漏掉未被证实的票</b>——要全覆盖只能存当日名单快照，而快照不能回溯。</p>
+<p class="small">复算：<code>build_st_intervals_v2.py</code>（纯 stdlib + duckdb 只读，6 项自检不过即拒绝落盘，约 10 秒）；
+完整对账文档 <a href="sample/st_interval_coverage.md">sample/st_interval_coverage.md</a>；旧版原文留档 <code>st_intervals_static_v1.csv</code> 可回滚。</p>
+
 <div class="cta">
 <b>免费下载</b><br>
 · ST 日下界样本（200 段真实区间，CSV）：<a href="sample/st_lowerbound_sample.csv">sample/st_lowerbound_sample.csv</a><br>
