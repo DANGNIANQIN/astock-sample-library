@@ -1,0 +1,30 @@
+MIT License
+
+Copyright (c) 2026 DANGNIANQIN
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+数据许可（本仓库随附的 CSV 样例与派生表）：
+  免费样例（近 40 个交易日，Release 中的 astock-sample-free.zip 与 sample/ 目录）
+  —— CC BY 4.0：署名后可自由使用、修改、再分发。
+  全量历史数据（2021 起 98,754 行）为付费项，不在本仓库内分发。
+数据来源：交易所公开日线行情派生（价格、成交量、涨跌停价），不含任何券商或第三方
+付费数据；口径与已知边界见 docs/fields.md 与 guide-limitup-caliber.html。

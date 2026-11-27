@@ -98,3 +98,10 @@ python3 daily_review_sample.py 2026-11-23   # 日报样刊 → day_report_data.j
 
 - 数据集与代做：闲鱼「A股 策略体检 / 公式代写 / 数据分析帮做」
 - 落地页：https://dangnianqin.github.io/astock-sample-library/
+
+## 许可
+
+- 代码与静态页（`*.py` / `*.js` / `*.html`）：MIT，见 [LICENSE](LICENSE)
+- 免费样例数据（Release 里的 `astock-sample-free.zip`、`sample/` 下的近 40 交易日 CSV）：CC BY 4.0，署名后可自由使用与再分发
+- 全量历史数据（2021 起 98,754 行 / 5,391 只含退市 / 1,424 个交易日）：付费项，不在本仓库分发
+- 数据来源：交易所公开日线派生（未复权价与成交量），不含任何付费数据源
