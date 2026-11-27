@@ -1,12 +1,12 @@
 {
- "updated_at": "2026-11-27T17:02:00+08:00",
+ "updated_at": "2026-11-27T17:34:47+08:00",
  "last_trade_date": "2026-11-27",
- "rows": 99185,
- "prev_rows": null,
+ "rows": 99191,
+ "prev_rows": 99185,
  "trading_days": 1425,
- "stocks": 5396,
+ "stocks": 5398,
  "latest": {
-  "limit_up": 431,
+  "limit_up": 437,
   "streak2plus": 30,
   "one_word": 6,
   "max_streak": 6,
@@ -15,22 +15,22 @@
   "caliber_note": "2026-08-03 起主板 ST 涨跌幅也是 10%，价格上无法识别 ST，本字段留空（不给假 0）"
  },
  "preview": {
-  "note": "公开页只放窗口预览；全量 2021 起（约 99185 行）在付费包里",
+  "note": "公开页只放窗口预览；全量 2021 起（约 99191 行）在付费包里",
   "detail_days": 40,
-  "detail_rows": 2731,
+  "detail_rows": 2737,
   "detail_covers_trading_days": 40,
   "senti_days": 120,
   "files": {
-   "涨停明细_近40交易日.csv": 263693,
-   "情绪日度_近120交易日.csv": 8592,
+   "涨停明细_近40交易日.csv": 264117,
+   "情绪日度_近120交易日.csv": 8631,
    "连板统计.csv": 1222
   }
  },
  "full": {
   "note": "本地导出，不上公网",
   "files": {
-   "涨停明细_2021-2026.csv": 9775740,
-   "情绪日度.csv": 100735,
+   "涨停明细_2021-2026.csv": 9776164,
+   "情绪日度.csv": 100681,
    "连板统计.csv": 1222
   }
  },
@@ -38,10 +38,10 @@
   "note": "免费样本，与 /live/ 同日刷新",
   "last_date": "2026-11-27",
   "first_date": "2026-10-19",
-  "rows": 2218,
+  "rows": 2224,
   "trading_days": 30,
   "files": {
-   "limitup_sample_30d.csv": 212693,
+   "limitup_sample_30d.csv": 213117,
    "sentiment_daily.csv": 30151,
    "streak_stats.csv": 1222
   }
