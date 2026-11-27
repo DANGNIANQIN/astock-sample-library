@@ -8,6 +8,7 @@
     var map = {
       mRows: m.rows.toLocaleString(),
       mDays: String(m.trading_days),
+      mStocks: m.stocks ? m.stocks.toLocaleString() : "—",
       mDate: m.last_trade_date,
       mAvg: (m.rows / m.trading_days).toFixed(1),
       mZt: String(f.limit_up),

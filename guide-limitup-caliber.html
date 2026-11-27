@@ -29,7 +29,7 @@ pre{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;
 <body>
 <div class="wrap">
 <h1>A股涨停/连板数据，自己算为什么老是算错</h1>
-<div class="sub">四条口径红线 · 附可直接下载自查的免费样本 · 更新到 <span data-m="mDate">2026-11-25</span></div>
+<div class="sub">四条口径红线 · 附可直接下载自查的免费样本 · 更新到 <span data-m="mDate">最新交易日</span></div>
 
 <p>涨停连板这类数据看着简单：涨幅到 10% 就是涨停，连续几天就是连板。真做起来，同一份行情用不同写法能算出差一倍的连板数。下面四条是我们踩过、并且能复现的坑，每条给出可自查的办法。</p>
 
@@ -69,17 +69,17 @@ pre{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;
 </div>
 <div class="card">
 <b><a href="/limitup-db.html">全量版说明（2021 起 10 万+ 行，付费）</a></b>
-2021-01 至最新交易日、<span data-m="mDays">1424</span> 个交易日、<span data-m="mRows">100,821</span> 条明细，每交易日收盘后重建。含连板数、是否一字、首封时间、次日表现等字段。
+2021-01 至最新交易日、<span data-m="mDays">—</span> 个交易日、<span data-m="mRows">—</span> 条明细，每交易日收盘后重建。含连板数、是否一字、首封时间、次日表现等字段。
 </div>
 
-<h2>最新一天的数据长什么样（<span data-m="mDate">2026-11-25</span>）</h2>
+<h2>最新一天的数据长什么样（<span data-m="mDate">最新交易日</span>）</h2>
 <ul>
-<li>交易日总数：<span data-m="mDays">1424</span>（2021-01-04 起）</li>
-<li>明细行数：<span data-m="mRows">100,821</span></li>
-<li>当日：涨停 <span data-m="mZt">58</span> 只、连板 <span data-m="mStreak2">15</span> 只、一字板 <span data-m="mOneWord">3</span> 只、最高 <span data-m="mMaxStreak">5</span> 板</li>
+<li>交易日总数：<span data-m="mDays">—</span>（2021-01-04 起）</li>
+<li>明细行数：<span data-m="mRows">—</span></li>
+<li>当日：涨停 <span data-m="mZt">—</span> 只、连板 <span data-m="mStreak2">—</span> 只、一字板 <span data-m="mOneWord">—</span> 只、最高 <span data-m="mMaxStreak">—</span> 板</li>
 </ul>
 <p>这几项每天都在变，页面上的 <code>meta.json</code> 是机器可读的同一份数，你可以拿来和 CSV 对。</p>
-<p><b>顺手对个账（<span data-m="mDate">2026-11-25</span> 实测）：</b>同一天我们算 <span data-m="mZt">58</span> 家涨停，东财「涨停池」接口只给 <b>51</b> 家，差的 7 家按行情简称核全是 <b>ST</b>（000078 ST海王、000826 *ST启环、000838 *ST发展、600180 *ST瑞茂、600340 *ST华幸、688066 *ST航图、300290 ST荣科）。东财涨停池默认剔除 ST，我们这张表保留。两边都不算错，但你必须知道自己拿的是哪一种：用错口径做回测，ST 的 5%→10% 分段涨跌幅会把连板数和次日续板率一起算歪。</p>
+<p><b>顺手对个账（<span data-m="mDate">最新交易日</span> 实测）：</b>同一天我们算 <span data-m="mZt">—</span> 家涨停，东财「涨停池」接口只给 <b>51</b> 家，差的 7 家按行情简称核全是 <b>ST</b>（000078 ST海王、000826 *ST启环、000838 *ST发展、600180 *ST瑞茂、600340 *ST华幸、688066 *ST航图、300290 ST荣科）。东财涨停池默认剔除 ST，我们这张表保留。两边都不算错，但你必须知道自己拿的是哪一种：用错口径做回测，ST 的 5%→10% 分段涨跌幅会把连板数和次日续板率一起算歪。</p>
 
 <h2>连板口径：一个具体票，谁都可以复算</h2>
 <p><b>603226 菲林格尔，2025 年 6 月：</b>05-30 收 8.22（前收 7.47，涨停价 8.217→8.22，首板）→ <b>06-03 全天停牌</b>（那天交易所正常开市、全市场 5,380 只有成交，但这只票没有 K 线、成交量为 0）→ 06-04 一字板 9.04 → 06-05 收 9.94 → 06-06 收 10.93。四天涨幅 9.96%~10.04%，每天严格等于当日涨停价（10% 档、四舍五入到分，不是向上取整）。</p>

@@ -38,13 +38,13 @@ A 股数据的坑几乎全在口径（复权、涨停价、ST 分段、连板分
 </table>
 
 <div class="kpi">
-  <div><b>98,754</b><span>行涨停记录</span></div>
-  <div><b>1,424</b><span>个交易日</span></div>
-  <div><b>5,391</b><span>只股票</span></div>
-  <div><b>58</b><span>最近一日涨停</span></div>
-  <div><b>15</b><span>最近一日连板</span></div>
+  <div><b data-m="mRows">—</b><span>行涨停记录</span></div>
+  <div><b data-m="mDays">—</b><span>个交易日</span></div>
+  <div><b data-m="mStocks">—</b><span>只股票</span></div>
+  <div><b data-m="mZt">—</b><span>最近一日涨停</span></div>
+  <div><b data-m="mStreak2">—</b><span>最近一日连板</span></div>
 </div>
-<div class="sub">区间 2021-01-11 → 2026-11-25，14 个字段：<code>code</code> / <code>date</code> / <code>board</code> / <code>is_st</code> / <code>close_raw</code> / <code>limit_price</code> / <code>amount</code> / <code>turnover</code> / <code>is_one_word</code> / <code>streak</code> / <code>next_open_gap</code> / <code>next_high_pct</code> / <code>next_close_pct</code> / <code>next_is_limit</code></div>
+<div class="sub" id="range-line">区间 2021-01-11 起至 <span data-m="mDate">最新交易日</span>，14 个字段：<code>code</code> / <code>date</code> / <code>board</code> / <code>is_st</code> / <code>close_raw</code> / <code>limit_price</code> / <code>amount</code> / <code>turnover</code> / <code>is_one_word</code> / <code>streak</code> / <code>next_open_gap</code> / <code>next_high_pct</code> / <code>next_close_pct</code> / <code>next_is_limit</code></div>
 
 <h2>交付什么</h2>
 <table><tr><th style="width:18%">层</th><th>内容</th></tr><tr><td><b>数据字典</b></td><td>字段名 / 单位 / 取值范围 / 空值含义 / 可复算示例，逐列对齐真实文件（不做「看着像」的字段表）</td></tr><tr><td><b>采集层</b></td><td>日线 + 复权因子 + 行业/板块 + 事件表，断点续采、重试、异常日跳过并记台账</td></tr><tr><td><b>清洗与口径</b></td><td>复权链、涨停价用 Decimal 定价、ST 分段涨跌幅、连板分段（gaps-islands）、次日字段以当日收盘为基准</td></tr><tr><td><b>质量闸门</b></td><td>进库前断言：完整率、涨跌家数平衡、连板层级自洽；不过闸门不出文件（宁缺不脏）</td></tr><tr><td><b>交付形态</b></td><td>CSV / Parquet / DuckDB 任选 + 每日自动覆盖 + 机读 meta.json（含最后交易日与行数，供你的下游做新鲜度判断）</td></tr></table>
@@ -86,4 +86,6 @@ A 股数据的坑几乎全在口径（复权、涨停价、ST 分段、连板分
 <footer>本页数字由 <code>assets/build_pipeline_proposal.py</code> 读真实导出文件与 meta.json 现场生成，复算命令：<code>python3 assets/build_pipeline_proposal.py</code>。<br>
 <a href="./">← 返回数据站首页</a> · <a href="./live/">每日更新页</a> · <a href="./guide-limitup-caliber.html">口径踩坑清单</a></footer>
 </div><script defer src="hit.js"></script>
-</body></html>
+</body>
+<script src="fresh.js" data-meta="live/meta.json"></script>
+</html>

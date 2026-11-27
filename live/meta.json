@@ -1,9 +1,10 @@
 {
- "updated_at": "2026-11-27T15:32:29+08:00",
+ "updated_at": "2026-11-27T17:02:00+08:00",
  "last_trade_date": "2026-11-27",
  "rows": 99185,
- "prev_rows": 98754,
+ "prev_rows": null,
  "trading_days": 1425,
+ "stocks": 5396,
  "latest": {
   "limit_up": 431,
   "streak2plus": 30,
