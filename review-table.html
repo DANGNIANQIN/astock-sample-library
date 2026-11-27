@@ -1,19 +1,22 @@
-<!doctype html><meta charset="utf-8"><title>A股复盘数据表 2026-11-25</title>
+<!doctype html><meta charset="utf-8"><title>A股复盘数据表 2026-11-27</title>
 <style>body{font:15px/1.7 -apple-system,'Noto Sans CJK SC',sans-serif;max-width:860px;margin:32px auto;padding:0 16px;color:#222}
 code{background:#f4f4f4;padding:2px 5px;border-radius:3px}td,th{border-bottom:1px solid #eee;padding:4px 8px;text-align:left}
 table{border-collapse:collapse;width:100%}h1{font-size:20px}</style>
-<h1>A股复盘数据表 · 2026-11-25</h1>
-<p>本页数据由本地 DuckDB 直接生成，全部可复算，<b>不含预测、不荐股、不构成投资建议</b>。</p>
-<h2>当日概览</h2><table>
-<tr><th>交易日</th><td>2026-11-25</td></tr>
-<tr><th>上市交易数 / 上涨 / 下跌</th><td>5827 / 584 / 4928</td></tr>
-<tr><th>涨停 / 跌停</th><td>58 / 50</td></tr>
-<tr><th>成交额</th><td>13829.3 亿元</td></tr>
-<tr><th>最高连板 / 一字板</th><td>5 板 / 3 只</td></tr>
+<h1>A股复盘数据表 · 数据截至 2026-11-27</h1>
+<p>本页数据由本地 DuckDB 直接生成，全部可复算，<b>不含预测、不荐股、不构成投资建议</b>。
+每个交易日收盘后按当日库重出，页头日期即数据截止日。</p>
+<h2>当日概览（2026-11-27）</h2><table>
+<tr><th>交易日</th><td>2026-11-27</td></tr>
+<tr><th>上市交易数 / 上涨 / 下跌</th><td>5827 / 5381 / 182</td></tr>
+<tr><th>涨停 / 跌停</th><td>437 / 1</td></tr>
+<tr><th>成交额</th><td>20172.8 亿元</td></tr>
+<tr><th>最高连板 / 一字板</th><td>6 板 / 6 只</td></tr>
 </table>
 <h2>下载（CSV，Excel 直接打开）</h2>
 <ul>
-<li><a href="review/zt-20261125.csv">zt-20261125.csv</a> — 58 只涨停明细：代码/名称/涨幅/成交额(亿)/换手率/涨跌幅上限/连板数/是否一字板</li>
+<li><a href="review/zt-20261127.csv">zt-20261127.csv</a>（当日）</li>
+<li><a href="review/zt-20261126.csv">zt-20261126.csv</a></li>
+<li><a href="review/zt-20261125.csv">zt-20261125.csv</a></li>
 <li><a href="review/breadth-20d.csv">breadth-20d.csv</a> — 近 20 个交易日：上市数/上涨/下跌/涨停/跌停/成交额(亿)</li>
 </ul>
 <h2>口径（可自行复算）</h2>
@@ -22,9 +25,9 @@ close_raw &gt;= round(preclose_raw * (1 + limit_pct), 2) - 0.001
 -- 连板：limit_up.streak；一字板：is_one_word
 -- 成交额：sum(amount)/1e8 亿元
 -- 涨跌幅上限 limit_pct：主板 0.10 / 创业板·科创板 0.20 / 北交所 0.30 / ST 按所属区间
-SELECT code, pct_chg, amount FROM v_kline_adj WHERE date='2026-11-25' ORDER BY amount DESC;</code></pre>
+SELECT code, pct_chg, amount FROM v_kline_adj WHERE date='2026-11-27' ORDER BY amount DESC;</code></pre>
 <p>字段说明：turnover=换手率(%)，amount_yi=成交额(亿元)，streak=连续涨停天数，
 is_one_word=1 表示当日一字板（开盘即涨停且全天未打开）。</p>
-<p style="color:#888;font-size:13px">生成：build_review_table.py · 2026-11-25 17:37</p>
-
-<script defer src="hit.js"></script>
+<p style="color:#888;font-size:13px">数据截至 2026-11-27 · 复算：
+<code>python3 build_review_table.py --asof 2026-11-27</code> ·
+当日涨停 437 只 · 明细 3 个交易日</p>

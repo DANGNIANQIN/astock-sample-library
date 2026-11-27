@@ -1,0 +1,46 @@
+{
+ "generator": "build_review_table.py",
+ "asof": "2026-11-27",
+ "days": [
+  "2026-11-25",
+  "2026-11-26",
+  "2026-11-27"
+ ],
+ "per_day_rows": {
+  "2026-11-25": 58,
+  "2026-11-26": 70,
+  "2026-11-27": 437
+ },
+ "breadth_latest": {
+  "date": "2026-11-27",
+  "listed": 5827,
+  "up": 5381,
+  "down": 182,
+  "limit_up": 437,
+  "limit_down": 1,
+  "amount_yi": 20172.8
+ },
+ "limit_up_table_count": 437,
+ "files": {
+  "review-table.html": {
+   "sha256": "371db4a1fe535b111c8f5bac5a1b8eb44fb1f5eba9142e97f91a9f7cbfb7cbec",
+   "bytes": 2256
+  },
+  "review/breadth-20d.csv": {
+   "sha256": "a5594a29692e8bf982fafdfc9e401ad12900ce5ccca24687e8368dcb652debf9",
+   "bytes": 858
+  },
+  "review/zt-20261125.csv": {
+   "sha256": "b3209b24e2fe8455b33a5786d889e748fc5d8150f3d1955810a92bd24837969a",
+   "bytes": 2732
+  },
+  "review/zt-20261126.csv": {
+   "sha256": "28bdee6e3a6e4ebc8b3f44230a268639e25f12c781ddae762173aa0aa9de7d23",
+   "bytes": 3308
+  },
+  "review/zt-20261127.csv": {
+   "sha256": "7194cfc5e6521e17f2201343d7d5c19df2a8973666896d3d99a8281678c78725",
+   "bytes": 20186
+  }
+ }
+}
