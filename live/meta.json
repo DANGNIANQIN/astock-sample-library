@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-27T19:39:34+08:00",
+ "updated_at": "2026-11-27T21:36:48+08:00",
  "last_trade_date": "2026-11-27",
  "rows": 99191,
  "prev_rows": null,
@@ -21,16 +21,16 @@
   "detail_covers_trading_days": 40,
   "senti_days": 120,
   "files": {
-   "涨停明细_近40交易日.csv": 264228,
-   "情绪日度_近120交易日.csv": 8578,
+   "涨停明细_近40交易日.csv": 263791,
+   "情绪日度_近120交易日.csv": 8605,
    "连板统计.csv": 1222
   }
  },
  "full": {
   "note": "本地导出，不上公网",
   "files": {
-   "涨停明细_2021-2026.csv": 9776304,
-   "情绪日度.csv": 100670,
+   "涨停明细_2021-2026.csv": 9775863,
+   "情绪日度.csv": 100757,
    "连板统计.csv": 1222
   }
  },
@@ -41,8 +41,8 @@
   "rows": 2224,
   "trading_days": 30,
   "files": {
-   "limitup_sample_30d.csv": 213212,
-   "sentiment_daily.csv": 30151,
+   "limitup_sample_30d.csv": 212775,
+   "sentiment_daily.csv": 30150,
    "streak_stats.csv": 1222
   }
  }
