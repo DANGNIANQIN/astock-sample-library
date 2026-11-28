@@ -7,7 +7,7 @@
 
 **先看后买**：免费样例就在本仓库（`sample/` 与 Release 里的 `astock-sample-free.zip`，随便下、随便核对）；要全量再走闲鱼，拍前可以先用免费样例对数：
 
-- ¥9.9 · 六年全量 CSV（十万行 · 拍下自动发货）→ https://www.goofish.com/item?id=1101776774916
+- ¥9.9 · 六年全量 CSV（9.9 万+ 行 · 拍下自动发货）→ https://www.goofish.com/item?id=1101776774916
 - ¥15.9 · 每日自动更新版（每交易日收盘后重建重发）→ https://www.goofish.com/item?id=1100855871116
 
 ## 零、先给你一个免费工具：涨停口径体检器
