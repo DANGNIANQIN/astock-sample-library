@@ -5,6 +5,11 @@
 
 > 别人给的是「今天的涨停池」，这里给的是**从 2021 年起 9.9 万+ 条的全量涨停数据**（含退市股、一字板标记、连板高度、次日表现），每天收盘后自动更新。
 
+**先看后买**：免费样例就在本仓库（`sample/` 与 Release 里的 `astock-sample-free.zip`，随便下、随便核对）；要全量再走闲鱼，拍前可以先用免费样例对数：
+
+- ¥9.9 · 六年全量 CSV（十万行 · 拍下自动发货）→ https://www.goofish.com/item?id=1101776774916
+- ¥15.9 · 每日自动更新版（每交易日收盘后重建重发）→ https://www.goofish.com/item?id=1100855871116
+
 ## 零、先给你一个免费工具：涨停口径体检器
 
 `tools/caliber_check.py`（单文件、纯 Python 标准库、`--selftest` 自检）—— 拿你自己的日线 CSV 跑一遍，
@@ -96,7 +101,10 @@ python3 daily_review_sample.py 2026-11-23   # 日报样刊 → day_report_data.j
 
 ## 联系方式
 
-- 数据集与代做：闲鱼「A股 策略体检 / 公式代写 / 数据分析帮做」
+- 获取全量数据（闲鱼拍下，先看免费样例再决定）：
+  - ¥9.9 六年全量 CSV → https://www.goofish.com/item?id=1101776774916
+  - ¥15.9 每日自动更新版 → https://www.goofish.com/item?id=1100855871116
+- 代做（策略体检 / 公式代写 / 数据分析帮做）：闲鱼「A股 策略体检 / 公式代写 / 数据分析帮做」
 - 落地页：https://dangnianqin.github.io/astock-sample-library/
 
 ## 许可
