@@ -13,9 +13,9 @@ code{background:#f4f4f4;padding:1px 5px;border-radius:3px;font-size:14px}
 </style></head><body>
 
 <h1>为什么我的涨停数，比东财 App 少几只？</h1>
-<p class="muted">生成于 2026-11-27 09:37 ｜ 数据源：本地通达信不复权日线 + 东财涨停池快照（5 个共同交易日）｜ 全部差异逐只公开，可自行复核</p>
+<p class="muted">数据截至 2026-11-27 ｜ 数据源：本地通达信不复权日线 + 东财涨停池快照（6 个共同交易日）｜ 全部差异逐只公开，可自行复核</p>
 
-<div class="box"><b>一句话：</b>两边不是同一把尺子。本地表判「<b>收盘价 == 涨停价</b>」，东财涨停池判「<b>采集那一刻是否封板</b>」，而且东财池<b>整体不含 ST</b>（全量 245 条快照里 ST 名称 0 条）。差几只不是谁算错，是口径不同。</div>
+<div class="box"><b>一句话：</b>两边不是同一把尺子。本地表判「<b>收盘价 == 涨停价</b>」，东财涨停池判「<b>采集那一刻是否封板</b>」，而且东财池<b>整体不含 ST</b>（全量 662 条快照里 ST 名称 0 条）。差几只不是谁算错，是口径不同。</div>
 
 <h2>1. 两边判据对比</h2>
 <table><tr><th></th><th>本地表</th><th>东财涨停池</th></tr>
@@ -25,28 +25,42 @@ code{background:#f4f4f4;padding:1px 5px;border-radius:3px;font-size:14px}
 <tr><td>可复算</td><td>是，任一行可手算核对</td><td>否，时点数据取完即定</td></tr>
 </table>
 
-<h2>2. 逐日对账（5 天）</h2>
+<h2>2. 逐日对账（6 天）</h2>
 <table><tr><th>日期</th><th>东财快照时点</th><th>本地</th><th>东财</th><th>交集</th><th>仅本地</th><th>仅东财</th></tr>
 <tr><td>2026-11-16</td><td>12:40:54（盘中）</td><td>33</td><td>33</td><td>29</td><td>4</td><td>4</td></tr>
 <tr><td>2026-11-18</td><td>21:36:16（收盘后）</td><td>43</td><td>41</td><td>41</td><td>2</td><td>0</td></tr>
 <tr><td>2026-11-24</td><td>22:47:07（收盘后）</td><td>63</td><td>55</td><td>54</td><td>9</td><td>1</td></tr>
 <tr><td>2026-11-25</td><td>18:05:42（收盘后）</td><td>58</td><td>51</td><td>51</td><td>7</td><td>0</td></tr>
 <tr><td>2026-11-26</td><td>18:05:31（收盘后）</td><td>70</td><td>65</td><td>65</td><td>5</td><td>0</td></tr>
+<tr><td>2026-11-27</td><td>18:05:49（收盘后）</td><td>437</td><td>417</td><td>415</td><td>22</td><td>2</td></tr>
 </table>
-<p>合计：仅本地 <b>27</b> 行 / 仅东财 <b>5</b> 行（共 32 行差异）。归因分布：</p>
+<p>合计：仅本地 <b>49</b> 行 / 仅东财 <b>7</b> 行（共 56 行差异）。归因分布：</p>
 <table><tr><th>归因</th><th>行数</th></tr>
-<tr><td>东财池排除 ST</td><td>22</td></tr>
+<tr><td>东财池排除 ST</td><td>31</td></tr>
+<tr><td>未解释（收盘封板但东财池无）</td><td>15</td></tr>
 <tr><td>快照时点：采集时封板、收盘已炸板</td><td>4</td></tr>
 <tr><td>快照时点：采集时尚未封板</td><td>3</td></tr>
-<tr><td>未解释（收盘封板但东财池无）</td><td>2</td></tr>
-<tr><td>东财池收取，但按收盘价不构成涨停</td><td>1</td></tr>
+<tr><td>东财池收取，但按收盘价不构成涨停</td><td>3</td></tr>
 </table>
-<p>其中 <b>2</b> 行未解释，逐只列在下一节，不猜理由。</p>
+<p>其中 <b>15</b> 行未解释，逐只列在下一节，不猜理由。</p>
 
 <h2>3. 未解释的逐只清单</h2>
 <table><tr><th>日期</th><th>方向</th><th>代码</th><th>名称</th><th>收盘</th><th>涨停价</th><th>收盘=涨停价</th></tr>
 <tr><td>2026-11-26</td><td>仅本地</td><td>002148</td><td>北纬科技</td><td>11.3</td><td>11.3</td><td>True</td></tr>
 <tr><td>2026-11-26</td><td>仅本地</td><td>603708</td><td>家家悦</td><td>10.65</td><td>10.65</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>001228</td><td>永泰运</td><td>32.23</td><td>32.23</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>002080</td><td>中材科技</td><td>33.07</td><td>33.07</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>002219</td><td>新里程</td><td>1.99</td><td>1.99</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>002348</td><td>高乐股份</td><td>8.09</td><td>8.09</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>002534</td><td>西子洁能</td><td>12.65</td><td>12.65</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>002614</td><td>奥佳华</td><td>6.13</td><td>6.13</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>002965</td><td>祥鑫科技</td><td>20.22</td><td>20.22</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>002976</td><td>瑞玛精密</td><td>14.22</td><td>14.22</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>600561</td><td>江西长运</td><td>4.61</td><td>4.61</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>603011</td><td>合锻智能</td><td>14.98</td><td>14.98</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>603269</td><td>海鸥股份</td><td>12.23</td><td>12.23</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>603678</td><td>火炬电子</td><td>27.96</td><td>27.96</td><td>True</td></tr>
+<tr><td>2026-11-27</td><td>仅本地</td><td>603989</td><td>艾华集团</td><td>20.58</td><td>20.58</td><td>True</td></tr>
 </table>
 <p class="muted">这几只是收盘后快照仍对不上的：不编原因，先列出来。等东财次日快照再复核。</p>
 
@@ -61,5 +75,4 @@ code{background:#f4f4f4;padding:1px 5px;border-radius:3px;font-size:14px}
 <p>这份对账的逐只明细在 <a href="https://github.com/DANGNIANQIN/astock-sample-library/blob/main/sample/ztpool_vs_tdx_20261127.csv">CSV</a>；每日自动更新的全量涨停/连板数据见 <a href="./limitup-db.html">数据说明</a>。有任何一只对不上，把代码+日期发我，我当场复算。</p>
 
 <p class="muted">口径自查工具：<a href="./caliber-check.html">涨停数据体检器</a>（八条零误报探针）</p>
-<script defer src="hit.js"></script>
 </body></html>
