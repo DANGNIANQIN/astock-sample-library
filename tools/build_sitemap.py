@@ -138,7 +138,7 @@ def selftest():
             raise AssertionError("幽灵 URL 未报错")
         except SystemExit:
             ok += 1
-    print(f"OK sitemap 生成器自检 {ok}/5")
+    print(f"OK sitemap 生成器 selftest {ok}/5")
 
 
 def main():
