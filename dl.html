@@ -14,12 +14,20 @@ a{color:#0b6bcb}</style></head>
 (function(){
   var s=document.getElementById('s');
   var q=new URLSearchParams(location.search);
-  var p=q.get('p')||'/';
-  if(p.charAt(0)!=='/')p='/'+p;
+  // p 有两种形态，别混：
+  //   ① 产品键（?p=lupack）——服务端认的是根路径带查询 /?p=lupack；
+  //   ② 完整路径（?p=/download?code=xxx）——原样转发。
+  // 2026-11-29 修：旧版把产品键硬当路径拼成 /lupack，服务端 404「页面不存在」，
+  // 而交付卡里写的就是 ?p=lupack ⇒ 买家从永久入口进去必 404。
+  var p=(q.get('p')||'').trim();
+  var target;
+  if(p.indexOf('/')===0) target=p;
+  else if(p) target='/?p='+encodeURIComponent(p);
+  else target='/';
   fetch('tunnel-host.txt?t='+Date.now()).then(function(r){return r.text()}).then(function(h){
     h=(h||'').trim();
     if(!h) throw new Error('empty');
-    location.replace('https://'+h+p);
+    location.replace('https://'+h+target);
   }).catch(function(){
     s.innerHTML='下载服务器暂时不可达。请 10 分钟后再打开本页；或 <a href="./index.html">先看免费样本</a>；仍未恢复请联系卖家补发。';
   });
